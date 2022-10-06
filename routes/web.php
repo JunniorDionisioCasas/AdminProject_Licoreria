@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('auth/login');
 });
 
+Route::get('/productos', function () {
+    return view('administrative/products/products');
+});
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
