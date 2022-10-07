@@ -217,7 +217,7 @@
             opcion = 'crear';
             $("#formProducto").trigger("reset");
             $("#imagenProd").prop("required", true);
-            $("#imgPreview").attr("src", "");
+            $("#imgPreview").attr("src", "images/placeholder.png");
             $('.modal-header').css("background-color", "#6c757d");
             $('.modal-title').text("Nuevo producto");
             $('#modalCRUD').modal('show');

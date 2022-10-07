@@ -21,6 +21,14 @@ Route::get('/productos', function () {
     return view('administrative/products/products');
 });
 
+Route::get('/categorias', function () {
+    return view('administrative/products/categorias');
+});
+
+Route::get('/marcas', function () {
+    return view('administrative/products/marcas');
+});
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
