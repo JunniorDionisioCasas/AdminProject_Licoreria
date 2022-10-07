@@ -23,6 +23,7 @@
                     <th scope="col">Marca</th>
                     <th scope="col">Fecha venc.</th>
                     <th scope="col">Descripción</th>
+                    <th scope="col">Img path</th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
@@ -57,7 +58,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">S/</span>
                                     </div>
-                                    <input id="precioProd" type="number" class="form-control" min="1" placeholder="Ingrese el precio del producto" required>
+                                    <input id="precioProd" type="number" class="form-control" min="1" step="0.01" placeholder="Ingrese el precio del producto" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -93,13 +94,16 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="imagenProd" class="col-sm-3 col-form-label">Imagen</label>
-                                <div class="col-sm-9">
+                                <label class="col-sm-3 col-form-label">Imagen</label>
+                                <div class="input-group col-sm-9">
                                     <div class="custom-file">
-                                        <input id="imagenProd" type="file" class="custom-file-input" accept="image/*">
-                                        <label class="custom-file-label" for="imagenProd">Elegir una imagen</label>
+                                        <input id="imagenProd" name="imagenProd" type="file" class="custom-file-input" accept="image/*">
+                                        <label class="custom-file-label" for="imagenProd" data-browse="Elegir">Seleccionar imagen</label>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="div-img-center">
+                                <img id="imgPreview" class="rounded-circle avatar-lg img-thumbnail img-preview" alt="product-image">
                             </div>
                         </div>
                     </div>
@@ -119,12 +123,15 @@
 
 @section('js')
     <script>
-        const urlDominio = 'http://127.0.0.1:8080/api';
+        //dominio del api
+        const urlDominio = 'http://127.0.0.1:8080/';
         let tabla = document.getElementById("tabla_productos");
-        let opcion, fila, id, nombre, precio, stock, fechaVenc, categoria, marca, descripcion, imagen;
+        let imagen = document.getElementById("imagenProd");
+        let opcion, fila, id, nombre, precio, stock, fechaVenc, categoria, marca, descripcion, imgPath;
+
         let dataTableProductos = $('#tabla_productos').DataTable({
             "ajax":{
-                "url":urlDominio+'/productos',
+                "url":urlDominio+'api/productos',
                 "dataSrc":""
             },
             "columns":[
@@ -136,6 +143,7 @@
                 {"data":"mrc_nombre"},
                 {"data":"prd_fecha_vencimiento"},
                 {"data":"prd_descripcion"},
+                {"data":"prd_imagen_path"},
                 {"defaultContent":`<button class="btn btn-outline-primary btn-xs btnEditar"><i class="fas fa-pen"> Editar</i></button>
                                    <button class="btn btn-outline-danger btn-xs btnEliminar"><i class="fas fa-trash-can"> Eliminar</i></button>`}
             ],
@@ -150,7 +158,7 @@
         });
 
         function listar_marcas() {
-            const url = urlDominio+'/marcas';
+            const url = urlDominio+'api/marcas';
 
             let select_marcas = document.getElementById('marcaProd');
 
@@ -175,7 +183,7 @@
         };
 
         function listar_categorias() {
-            const url = urlDominio+'/categorias';
+            const url = urlDominio+'api/categorias';
 
             let select_categorias = document.getElementById('categoriaProd');
 
@@ -208,6 +216,8 @@
         $('#btnCrear').click(function (){
             opcion = 'crear';
             $("#formProducto").trigger("reset");
+            $("#imagenProd").prop("required", true);
+            $("#imgPreview").attr("src", "");
             $('.modal-header').css("background-color", "#6c757d");
             $('.modal-title').text("Nuevo producto");
             $('#modalCRUD').modal('show');
@@ -216,6 +226,7 @@
         //Editar
         $(document).on('click', '.btnEditar', function (){
             opcion = 'editar';
+            $("#imagenProd").prop("required", false);
             fila = $(this).closest('tr');
 
             id = parseInt(fila.find('td:eq(0)').text());
@@ -226,13 +237,13 @@
             marca = fila.find('td:eq(5)').text();
             fechaVenc = fila.find('td:eq(6)').text();
             descripcion = fila.find('td:eq(7)').text();
+            imgPath = fila.find('td:eq(8)').text();
 
+            $("#idProd").val(id);
             $("#nombreProd").val(nombre);
             $("#precioProd").val(precio);
             $("#stockProd").val(stock);
             $("#fechaVencProd").val(fechaVenc);
-            // $("#categoriaProd").val();
-            // $("#marcaProd").val();
             $("#descProd").val(descripcion);
 
             $("#categoriaProd option").filter(function() {
@@ -242,6 +253,8 @@
             $("#marcaProd option").filter(function() {
                 return $(this).text() == marca;
             }).attr('selected', true);
+
+            $("#imgPreview").attr("src", imgPath); //urlDominio+"images/productos/"+imgPath
 
             $('.modal-header').css("background-color", "#007bff");
             $('.modal-title').text("Editar producto");
@@ -256,13 +269,15 @@
             Swal.fire({
                 title: 'Confirma eliminar el producto?',
                 showCancelButton: true,
-                icon: 'error',
+                showConfirmButton: true,
+                type: 'warning',
                 cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Confirmar'
+                confirmButtonText: 'Confirmar',
             }).then( (result) => {
-                if (result.isConfirmed) {
+                console.log(result);
+                if (result.value == true) {
                     //api producto/id, delete
-                    let url = urlDominio+'/producto/'+id;
+                    let url = urlDominio+'api/producto/'+id;
 
                     fetch(url, {
                         method: 'DELETE',
@@ -272,11 +287,14 @@
                     })
                     .then(res => res.json(), console.log('Cargando API delete producto/id'))
                     .then(success => {
-                        tabla.row(fila.parents('tr')).remove().draw();
+                        // dataTableProductos.row(fila.parents('tr')).remove().draw();
+                        dataTableProductos.ajax.reload(null, false);
                         Swal.fire('Producto eliminado', '', 'success');
                         console.log(success);
                     })
                     .catch(error => console.log(error));
+                }else{
+                    console.log('cancelado');
                 }
             })
         })
@@ -284,7 +302,7 @@
         //submit form crear o editar
         $("#formProducto").submit(function (e){
             e.preventDefault();
-            id = $.trim($('#idProd').val());
+            id = $('#idProd').val();
             nombre = $('#nombreProd').val();
             precio = $.trim($('#precioProd').val());
             stock = $.trim($('#stockProd').val());
@@ -292,7 +310,6 @@
             marca = $('#marcaProd').val();
             fechaVenc = $.trim($('#fechaVencProd').val());
             descripcion = $.trim($('#descProd').val());
-            imagen = $('#imagenProd');
 
             let formData = new FormData();
 
@@ -303,39 +320,75 @@
             formData.append('id_marca', marca);
             formData.append('prd_fecha_vencimiento', fechaVenc);
             formData.append('prd_descripcion', descripcion);
-            formData.append('prd_imagen', imagen.files[0]);
+            if(imagen.files.length !== 0){
+                formData.append('prd_imagen', imagen.files[0]);
+            }
 
             //prueba de obtencio de datos del form
             for (const pair of formData) {
                 console.log(`${pair[0]}: ${pair[1]}\n`);
             }
-            console.log(imagen.files[0].name);
 
             if(opcion == 'crear'){
                 //api producto, post
-                let url = urlDominio + '/producto';
+                let url = urlDominio + 'api/producto';
                 fetch(url, {
                     method: 'POST',
                     body: formData
                 })
-                .then(res => res.json())
-                .then(success => {
-                    console.log(success);
+                    .then(res => res.json())
+                    .then(success => {
+                        console.log(success);
 
-                    Swal.fire({
-                        title: 'Exito!',
-                        text: 'El producto se registró exitosamente',
-                        icon: 'success',
-                        confirmButtonText: 'Ok'
-                    }).then( (result) => {
-                        if (result.isConfirmed || result.dismiss) {
-                            location.reload();
-                        }
+                        Swal.fire({
+                            title: 'Exito!',
+                            text: 'El producto se registró exitosamente',
+                            type: 'success',
+                            confirmButtonText: 'Ok'
+                        }).then((result) => {
+                            dataTableProductos.ajax.reload(null, false);
+                            // location.reload();
+                        });
+                        $('#modalCRUD').modal('hide');
                     })
+                    .catch(error => console.log(error));
+            }
+            if(opcion == 'editar'){
+                //api producto (update)
+                let url = urlDominio + 'api/producto/'+id;
+                fetch(url, {
+                    method: 'POST',
+                    body: formData
                 })
-                .catch(error => console.log(error));
+                    .then(res => res.json())
+                    .then(success => {
+                        console.log(success);
+
+                        Swal.fire({
+                            title: 'Exito!',
+                            text: 'El producto se actualizó exitosamente',
+                            type: 'success',
+                            confirmButtonText: 'Ok'
+                        }).then( (result) => {
+                            dataTableProductos.ajax.reload(null, false);
+                            // location.reload();
+                        });
+
+                        $('#modalCRUD').modal('hide');
+                    })
+                    .catch(error => console.log(error));
             }
         });
+
+        $('#imagenProd').on('change',function(e){
+            let reader = new FileReader();
+            let fileName = imagen.files[0].name;
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+            reader.onload = function(e) {
+                document.getElementById("imgPreview").src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
+        })
 
         /*function listar_productos() {
             const url = urlDominio+'/productos';

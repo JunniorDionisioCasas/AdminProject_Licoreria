@@ -2,3 +2,18 @@
 .btn-crear{
     margin-bottom: 20px;
 }
+
+.div-img-center {
+    text-align: center;
+}
+
+/*preview de imagen seleccionada*/
+.img-preview {
+    width:200px;
+    height:200px
+}
+
+/*columna imagen path oculta*/
+#tabla_productos tr td:nth-child(9), #tabla_productos th:nth-child(9) {
+    display: none;
+}
