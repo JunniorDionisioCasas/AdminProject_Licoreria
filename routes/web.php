@@ -17,18 +17,6 @@ Route::get('/', function () {
     return view('auth/login');
 });
 
-Route::get('/productos', function () {
-    return view('administrative/products/products');
-});
-
-Route::get('/categorias', function () {
-    return view('administrative/products/categorias');
-});
-
-Route::get('/marcas', function () {
-    return view('administrative/products/marcas');
-});
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -37,4 +25,16 @@ Route::middleware([
     Route::get('/home', function () {
         return view('dashboard/home');
     })->name('home');
+    
+    Route::get('/productos', function () {
+        return view('administrative/products/products');
+    });
+
+    Route::get('/categorias', function () {
+        return view('administrative/products/categorias');
+    });
+
+    Route::get('/marcas', function () {
+        return view('administrative/products/marcas');
+    });
 });

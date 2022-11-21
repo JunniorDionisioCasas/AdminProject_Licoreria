@@ -41,10 +41,5 @@
 
         @livewireScripts
 
-        <!-- my common script -->
-        <script>
-            //dominio del api
-            const urlDominio = 'https://api.licoreriasansebastian.com/'; //'http://127.0.0.1:8080/';
-        </script>
     </body>
 </html>

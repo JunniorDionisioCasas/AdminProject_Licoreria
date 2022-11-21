@@ -123,6 +123,7 @@
 @stop
 
 @section('js')
+    <script src="js/urlDomain.js"></script>
     <script>
         let tabla = document.getElementById("tabla_productos");
         let imagen = document.getElementById("imagenProd");
