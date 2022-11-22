@@ -69,6 +69,7 @@
 @stop
 
 @section('js')
+    <script src="js/urlDomain.js"></script>
     <script>
         let tabla = document.getElementById("tabla_marcas");
         let opcion, fila, id, nombre, descripcion;
