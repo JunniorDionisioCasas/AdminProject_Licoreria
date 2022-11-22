@@ -17,3 +17,17 @@
 #tabla_productos tr td:nth-child(9), #tabla_productos th:nth-child(9) {
     display: none;
 }
+
+/* data tables buttons styles */
+.copyButton{
+    
+}
+.excelButton{
+    
+}
+.csvButton{
+    
+}
+.printButton{
+    
+}

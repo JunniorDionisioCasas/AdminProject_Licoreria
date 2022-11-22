@@ -132,6 +132,7 @@
         let dataTableProductos = $('#tabla_productos').DataTable({
             "ajax":{
                 "url":urlDominio+'api/productos',
+                "type": "GET",
                 "dataSrc":""
             },
             "columns":[
@@ -141,7 +142,10 @@
                 {"data":"prd_stock"},
                 {"data":"ctg_nombre"},
                 {"data":"mrc_nombre"},
-                {"data":"prd_fecha_vencimiento"},
+                {
+                    "data":"prd_fecha_vencimiento",
+                    "defaultContent": "<i>No aplicable</i>"
+                },
                 {"data":"prd_descripcion"},
                 {"data":"prd_imagen_path"},
                 {"defaultContent":`<button class="btn btn-outline-primary btn-xs btnEditar"><i class="fas fa-pen"> Editar</i></button>
@@ -154,7 +158,21 @@
                         return 'S/ '+Number(v).toFixed(2)
                     }
                 }
-            ]
+            ],
+            language: {
+                url: 'vendor/datatables-plugins/internationalisation/es-ES.json'
+            },
+            dom:"<'row'<'col-sm-12 col-md-6'lB><'col-sm-12 col-md-6'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            buttons: {
+                buttons: [
+                    { extend: 'copy', className: 'copyButton' },
+                    { extend: 'excel', className: 'excelButton' },
+                    { extend: 'csv', className: 'csvButton' },
+                    { extend: 'print', className: 'printButton' }
+                ]
+            }
         });
 
         function listar_marcas() {
