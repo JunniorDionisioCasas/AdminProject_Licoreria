@@ -1,6 +1,7 @@
 
 .btn-crear{
-    margin-bottom: 20px;
+    background-color: #e34444;
+    border-color: #e34444;
 }
 
 .div-img-center {
@@ -17,17 +18,20 @@
 #tabla_productos tr td:nth-child(9), #tabla_productos th:nth-child(9) {
     display: none;
 }
-
+/* data tables styles */
+.dataTables_length {
+    display: inline-flex;
+    margin-right: 10px;
+}
 /* data tables buttons styles */
 .copyButton{
-    
 }
 .excelButton{
-    
+    background-color: green;
 }
 .csvButton{
-    
+    background-color: #007bff;
 }
 .printButton{
-    
+    background-color: #dc3545;
 }

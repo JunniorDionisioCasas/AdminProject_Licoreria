@@ -7,30 +7,35 @@
 @stop
 
 @section('content')
-    <div class="container-fluid">
-        <button id="btnCrear" type="button" class="btn btn-secondary btn-crear">Crear</button>
-    </div>
-
-    <div class="table-responsive">
-        <table id="tabla_productos" class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Precio</th>
-                    <th scope="col">Stock</th>
-                    <th scope="col">Categoria</th>
-                    <th scope="col">Marca</th>
-                    <th scope="col">Fecha venc.</th>
-                    <th scope="col">Descripción</th>
-                    <th scope="col">Img path</th>
-                    <th scope="col">Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="lista_productos">
-                <!-- lista de productos mediante api -->
-            </tbody>
-        </table>
+    <div class="card">
+        <div class="card-header">
+            <div class="container-fluid">
+                <button id="btnCrear" type="button" class="btn btn-secondary btn-crear">Nuevo producto</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="tabla_productos" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Stock</th>
+                            <th scope="col">Categoria</th>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Fecha venc.</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Img path</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista_productos">
+                        <!-- lista de productos mediante api -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div id="modalCRUD" class="modal" aria-labelledby="Formulario de nuevo producto" tabindex="-1">
@@ -144,12 +149,23 @@
                 {"data":"mrc_nombre"},
                 {
                     "data":"prd_fecha_vencimiento",
-                    "defaultContent": "<i>No aplicable</i>"
+                    "defaultContent":"<i>No aplicable</i>"
                 },
-                {"data":"prd_descripcion"},
+                {
+                    "data":"prd_descripcion",
+                    "defaultContent":"<i>Sin descripción</i>",
+                    "orderable":false
+                },
                 {"data":"prd_imagen_path"},
-                {"defaultContent":`<button class="btn btn-outline-primary btn-xs btnEditar"><i class="fas fa-pen"> Editar</i></button>
-                                   <button class="btn btn-outline-danger btn-xs btnEliminar"><i class="fas fa-trash-can"> Eliminar</i></button>`}
+                {
+                    "defaultContent":`<button class="btn btn-xs btn-default text-primary mx-1 shadow btnEditar" title="Editar">
+                                        <i class="fa fa-lg fa-fw fa-pen"></i>
+                                    </button>
+                                    <button class="btn btn-xs btn-default text-danger mx-1 shadow btnEliminar" title="Eliminar">
+                                        <i class="fa fa-lg fa-fw fa-trash"></i>
+                                    </button>`,
+                    "orderable":false
+                }
             ],
             "columnDefs":[
                 {
@@ -159,18 +175,19 @@
                     }
                 }
             ],
+            autoWidth: false,
             language: {
                 url: 'vendor/datatables-plugins/internationalisation/es-ES.json'
             },
-            dom:"<'row'<'col-sm-12 col-md-6'lB><'col-sm-12 col-md-6'f>>" +
+            dom:"<'row'<'col-sm-12 col-md-7'lB><'col-sm-12 col-md-5'f>>" +
                 "<'row'<'col-sm-12'tr>>" +
                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             buttons: {
                 buttons: [
-                    { extend: 'copy', className: 'copyButton' },
-                    { extend: 'excel', className: 'excelButton' },
-                    { extend: 'csv', className: 'csvButton' },
-                    { extend: 'print', className: 'printButton' }
+                    { extend: 'copy', text:'<i class="fas fa-copy"></i>', titleAttr:'Copiar', className: 'copyButton' },
+                    { extend: 'excel', text:'<i class="fas fa-file-excel"></i>', titleAttr:'Formato Excel', className: 'excelButton' },
+                    { extend: 'csv', text:'<i class="fas fa-file-csv"></i>', titleAttr:'Formato .csv', className: 'csvButton' },
+                    { extend: 'print', text:'<i class="fas fa-print"></i>', titleAttr:'Imprimir', className: 'printButton' }
                 ]
             }
         });
