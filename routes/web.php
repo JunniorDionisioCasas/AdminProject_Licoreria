@@ -26,6 +26,7 @@ Route::middleware([
         return view('dashboard/home');
     })->name('home');
     
+    // products
     Route::get('/productos', function () {
         return view('administrative/products/products');
     });
@@ -36,5 +37,44 @@ Route::middleware([
 
     Route::get('/marcas', function () {
         return view('administrative/products/marcas');
+    });
+
+    Route::get('/proveedores', function () {
+        return view('administrative/products/proveedores');
+    });
+
+    // sales
+    Route::get('/pedidos', function () {
+        return view('administrative/sales/pedidos');
+    });
+    
+    Route::get('/tipos-pedidos', function () {
+        return view('administrative/sales/tipos-pedidos');
+    });
+
+    Route::get('/descuentos', function () {
+        return view('administrative/sales/descuentos');
+    });
+
+    Route::get('/tipos-descuentos', function () {
+        return view('administrative/sales/tipos-descuentos');
+    });
+
+    // human_resources
+    Route::get('/clientes', function () {
+        return view('administrative/human_resources/clientes');
+    });
+
+    Route::get('/empleados', function () {
+        return view('administrative/human_resources/empleados');
+    });
+    
+    Route::get('/cargos', function () {
+        return view('administrative/human_resources/cargos');
+    });
+
+    // reportes
+    Route::get('/reporte-ventas', function () {
+        return view('administrative/reports/reporte-ventas');
     });
 });

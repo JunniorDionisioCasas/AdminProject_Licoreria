@@ -330,7 +330,7 @@ return [
             'icon' => 'fas fa-fw fa-lock',
         ], */
 
-        ['header' => 'Administrar'],
+        ['header' => 'INVENTARIO'],
         [
             'text'    => 'Productos',
             'icon'    => 'fas fa-wine-bottle',
@@ -342,33 +342,75 @@ return [
                 [
                     'text'    => 'Categorias',
                     'url'     => '/categorias',
-                    /* 'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ], */
-                ],
-                [
-                    'text' => 'Marcas',
-                    'url'  => '/marcas',
                 ],
             ],
         ],
+        [
+            'text' => 'Marcas',
+            'url'  => '/marcas',
+            'icon'    => 'far fa-copyright',
+        ],
+        [
+            'text' => 'Proveedores',
+            'url'  => '/proveedores',
+            'icon'    => 'fas fa-industry',
+        ],
+        ['header' => 'VENTAS'],
+        [
+            'text'    => 'Pedidos',
+            'icon'    => 'fas fa-cash-register',
+            'submenu' => [
+                [
+                    'text' => 'Pedidos',
+                    'url'  => '/pedidos',
+                ],
+                [
+                    'text' => 'Tipos',
+                    'url'  => '/tipos-pedidos',
+                ],
+            ],
+        ],
+        [
+            'text'    => 'Descuentos',
+            'icon'    => 'fas fa-percent',
+            'submenu' => [
+                [
+                    'text'    => 'Descuentos',
+                    'url'     => '/descuentos',
+                ],
+                [
+                    'text'    => 'Tipos',
+                    'url'     => '/tipos-descuentos',
+                ],
+            ],
+        ],
+        ['header' => 'RECURSOS HUMANOS'],
+        [
+            'text'    => 'Clientes',
+            'url'     => '/clientes',
+            'icon'    => 'fas fa-users',
+        ],
+        [
+            'text' => 'Empleados',
+            'icon'    => 'fas fa-user-tie',
+            'submenu' => [
+                [
+                    'text' => 'Empleados',
+                    'url'  => '/empleados',
+                ],
+                [
+                    'text'    => 'Cargos',
+                    'url'     => '/cargos',
+                ],
+            ],
+        ],
+        ['header' => 'REPORTES'],
+        [
+            'text'    => 'Ventas',
+            'url'     => '/reporte-ventas',
+            'icon'    => 'fa fa-chart-bar',
+        ],
+        
         /* ['header' => 'labels'],
         [
             'text'       => 'important',
