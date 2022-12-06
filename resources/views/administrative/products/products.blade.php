@@ -24,6 +24,7 @@
                             <th scope="col">Stock</th>
                             <th scope="col">Categoria</th>
                             <th scope="col">Marca</th>
+                            <th scope="col">Proveedor</th>
                             <th scope="col">Fecha venc.</th>
                             <th scope="col">Descripción</th>
                             <th scope="col">Img path</th>
@@ -52,13 +53,13 @@
                         <div class="container-fluid">
                             <input id="idProd" type="hidden">
                             <div class="form-group row">
-                                <label for="nombreProd" class="col-sm-2 col-form-label">Nombre</label>
+                                <label for="nombreProd" class="col-sm-2 col-form-label">Nombre*</label>
                                 <div class="col-sm-10">
                                     <input id="nombreProd" type="text" class="form-control" placeholder="Ingrese el nombre del producto" required>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="precioProd" class="col-sm-2 col-form-label">Precio</label>
+                                <label for="precioProd" class="col-sm-2 col-form-label">Precio*</label>
                                 <div class="input-group col-sm-10">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">S/</span>
@@ -67,28 +68,34 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="stockProd" class="col-sm-2 col-form-label">Stock</label>
+                                <label for="stockProd" class="col-sm-2 col-form-label">Stock*</label>
                                 <div class="col-sm-10">
                                     <input id="stockProd" type="number" class="form-control" min="0" placeholder="Ingrese el stock inicial" required>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="fechaVencProd" class="col-sm-5 col-form-label">Fecha de vencimiento</label>
-                                <div class="col-sm-7">
+                                <label for="fechaVencProd" class="col-sm-7 col-form-label">Fecha de vencimiento (opcional)</label>
+                                <div class="col-sm-5">
                                     <input id="fechaVencProd" type="date" class="form-control" placeholder="Ingrese la fecha">
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-sm-6">
-                                    <label for="categoriaProd" class="col-sm-2 col-form-label">Categoria</label>
+                                <div class="form-group col-sm-4">
+                                    <label for="categoriaProd" class="col-sm-2 col-form-label">Categoria*</label>
                                     <select id="categoriaProd" class="form-control" required>
                                         <!-- Se insertan la lista de categorias mediante api -->
                                     </select>
                                 </div>
-                                <div class="form-group col-sm-6">
-                                    <label for="marcaProd" class="col-sm-2 col-form-label">Marca</label>
+                                <div class="form-group col-sm-4">
+                                    <label for="marcaProd" class="col-sm-2 col-form-label">Marca*</label>
                                     <select id="marcaProd" class="form-control" required>
                                         <!-- Se insertan la lista de marcas mediante api -->
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-4">
+                                    <label for="proveedorProd" class="col-sm-2 col-form-label">Proveedor*</label>
+                                    <select id="proveedorProd" class="form-control" required>
+                                        <!-- Se insertan la lista de proveedores mediante api -->
                                     </select>
                                 </div>
                             </div>
@@ -99,7 +106,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Imagen</label>
+                                <label class="col-sm-3 col-form-label">Imagen*</label>
                                 <div class="input-group col-sm-9">
                                     <div class="custom-file">
                                         <input id="imagenProd" name="imagenProd" type="file" class="custom-file-input" accept="image/*">
@@ -130,10 +137,6 @@
 @section('js')
     <script src="js/urlDomain.js"></script>
     <script>
-        let tabla = document.getElementById("tabla_productos");
-        let imagen = document.getElementById("imagenProd");
-        let opcion, fila, id, nombre, precio, stock, fechaVenc, categoria, marca, descripcion, imgPath;
-
         let dataTableProductos = $('#tabla_productos').DataTable({
             "ajax":{
                 "url":urlDominio+'api/productos',
@@ -147,6 +150,7 @@
                 {"data":"prd_stock"},
                 {"data":"ctg_nombre"},
                 {"data":"mrc_nombre"},
+                {"data":"prv_nombre"},
                 {
                     "data":"prd_fecha_vencimiento",
                     "defaultContent":"<i>No aplicable</i>"
@@ -184,13 +188,49 @@
                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             buttons: {
                 buttons: [
-                    { extend: 'copy', text:'<i class="fas fa-copy"></i>', titleAttr:'Copiar', className: 'copyButton' },
-                    { extend: 'excel', text:'<i class="fas fa-file-excel"></i>', titleAttr:'Formato Excel', className: 'excelButton' },
-                    { extend: 'csv', text:'<i class="fas fa-file-csv"></i>', titleAttr:'Formato .csv', className: 'csvButton' },
-                    { extend: 'print', text:'<i class="fas fa-print"></i>', titleAttr:'Imprimir', className: 'printButton' }
+                    {
+                        extend: 'copy',
+                        text:'<i class="fas fa-copy"></i>',
+                        titleAttr:'Copiar',
+                        className: 'copyButton',
+                        exportOptions: {
+                            columns: [0,1,2,3,4,5,6]
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        text:'<i class="fas fa-file-excel"></i>',
+                        titleAttr:'Formato Excel',
+                        className: 'excelButton',
+                        exportOptions: {
+                            columns: [0,1,2,3,4,5,6]
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        text:'<i class="fas fa-file-csv"></i>',
+                        titleAttr:'Formato CSV',
+                        className: 'csvButton',
+                        exportOptions: {
+                            columns: [0,1,2,3,4,5,6]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text:'<i class="fas fa-print"></i>',
+                        titleAttr:'Imprimir',
+                        className: 'printButton',
+                        exportOptions: {
+                            columns: [0,1,2,3,4,5,6]
+                        }
+                    }
                 ]
             }
         });
+
+        let tabla = document.getElementById("tabla_productos");
+        let imagen = document.getElementById("imagenProd");
+        let opcion, fila, id, nombre, precio, stock, fechaVenc, categoria, marca, proveedor, descripcion, imgPath;
 
         function listar_marcas() {
             const url = urlDominio+'api/marcas';
@@ -244,8 +284,34 @@
                 .catch(error => console.log(error));
         };
 
+        function listar_proveedores() {
+            const url = urlDominio+'api/proveedores';
+
+            let select_proveedores = document.getElementById('proveedorProd');
+
+            //llamado al api proveedores, index
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then(res => res.json(), console.log('Cargando API proveedores'))
+            .then(res => {
+                console.log(res);
+                res.forEach(proveedor => {
+                    let option_elem = document.createElement('option');
+                    option_elem.value = proveedor.id_proveedor;
+                    option_elem.textContent = proveedor.prv_nombre;
+                    select_proveedores.appendChild(option_elem);
+                });
+            })
+            .catch(error => console.log(error));
+        };
+
         listar_categorias();
         listar_marcas();
+        listar_proveedores();
 
         //Crear
         $('#btnCrear').click(function (){
@@ -270,9 +336,10 @@
             stock = parseInt(fila.find('td:eq(3)').text());
             categoria = fila.find('td:eq(4)').text();
             marca = fila.find('td:eq(5)').text();
-            fechaVenc = fila.find('td:eq(6)').text();
-            descripcion = fila.find('td:eq(7)').text();
-            imgPath = fila.find('td:eq(8)').text();
+            proveedor = fila.find('td:eq(6)').text();
+            fechaVenc = fila.find('td:eq(7)').text();
+            descripcion = fila.find('td:eq(8)').text();
+            imgPath = fila.find('td:eq(9)').text();
 
             $("#idProd").val(id);
             $("#nombreProd").val(nombre);
@@ -282,11 +349,16 @@
             $("#descProd").val(descripcion);
 
             $("#categoriaProd option").filter(function() {
+                console.log($(this).text() == categoria);
                 return $(this).text() == categoria;
             }).attr('selected', true);
 
             $("#marcaProd option").filter(function() {
                 return $(this).text() == marca;
+            }).attr('selected', true);
+
+            $("#proveedorProd option").filter(function() {
+                return $(this).text() == proveedor;
             }).attr('selected', true);
 
             $("#imgPreview").attr("src", imgPath); //urlDominio+"images/productos/"+imgPath
@@ -343,6 +415,7 @@
             stock = $.trim($('#stockProd').val());
             categoria = $('#categoriaProd').val();
             marca = $('#marcaProd').val();
+            proveedor = $('#proveedorProd').val();
             fechaVenc = $.trim($('#fechaVencProd').val());
             descripcion = $.trim($('#descProd').val());
 
@@ -353,6 +426,7 @@
             formData.append('prd_stock', stock);
             formData.append('id_categoria', categoria);
             formData.append('id_marca', marca);
+            formData.append('id_proveedor', proveedor);
             formData.append('prd_fecha_vencimiento', fechaVenc);
             formData.append('prd_descripcion', descripcion);
             if(imagen.files.length !== 0){
@@ -423,52 +497,7 @@
                 document.getElementById("imgPreview").src = e.target.result;
             };
             reader.readAsDataURL(this.files[0]);
-        })
-
-        /*function listar_productos() {
-            const url = urlDominio+'/productos';
-
-            let lista_productos = document.getElementById('lista_productos');
-
-            //llamado al api productos, index
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-                .then(res => res.json(), console.log('Cargando API productos'))
-                .then(res => {
-                    console.log(res);
-                    res.forEach(producto => {
-                        let fila = tabla.insertRow();
-
-                        let id = fila.insertCell(0);
-                        id.innerHTML = producto.id_producto;
-                        let nombre = fila.insertCell(1);
-                        nombre.innerHTML = producto.prd_nombre;
-                        let precio = fila.insertCell(2);
-                        precio.innerHTML = "S/ " + producto.prd_precio;
-                        let stock = fila.insertCell(3);
-                        stock.innerHTML = producto.prd_stock;
-                        let categoria = fila.insertCell(4);
-                        categoria.innerHTML = producto.id_categoria;
-                        let marca = fila.insertCell(5);
-                        marca.innerHTML = producto.id_marca;
-                        let fecha_vnc = fila.insertCell(6);
-                        fecha_vnc.innerHTML = producto.prd_fecha_vencimiento;
-                        let descripcion = fila.insertCell(7);
-                        descripcion.innerHTML = producto.prd_descripcion;
-                        let acciones = fila.insertCell(8);
-                        acciones.innerHTML = `<a id="btnEditar" href="./editar_producto?` + producto.id_producto + `" class="btn btn-outline-primary btn-xs"><i class="fas fa-pen"> Editar</i></a>
-                                            <button id="btnEliminar" onclick="eliminar_producto(` + producto.id_producto + `)" class="btn btn-outline-danger btn-xs"><i class="fas fa-trash-can"> Eliminar</i></button>`;
-                    });
-                })
-                .catch(error => console.log(error));
-        };
-
-        listar_productos();*/
-
+        });
     </script>
 @stop
 

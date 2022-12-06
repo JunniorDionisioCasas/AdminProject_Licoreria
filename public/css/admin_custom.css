@@ -8,6 +8,10 @@
     text-align: center;
 }
 
+.centerVertical {
+    margin: auto;
+}
+
 /*preview de imagen seleccionada*/
 .img-preview {
     width:200px;
@@ -15,7 +19,7 @@
 }
 
 /*columna imagen path oculta*/
-#tabla_productos tr td:nth-child(9), #tabla_productos th:nth-child(9) {
+#tabla_productos tr td:nth-child(10), #tabla_productos th:nth-child(10) {
     display: none;
 }
 /* data tables styles */

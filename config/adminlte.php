@@ -15,7 +15,7 @@ return [
     */
 
     'title' => 'San Sebastián',
-    'title_prefix' => 'Sistema - ',
+    'title_prefix' => 'San Sebastián - ',
     'title_postfix' => '',
 
     /*

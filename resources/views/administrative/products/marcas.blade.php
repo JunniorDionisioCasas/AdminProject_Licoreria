@@ -112,10 +112,42 @@
                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
             buttons: {
                 buttons: [
-                    { extend: 'copy', text:'<i class="fas fa-copy"></i>', titleAttr:'Copiar', className: 'copyButton' },
-                    { extend: 'excel', text:'<i class="fas fa-file-excel"></i>', titleAttr:'Formato Excel', className: 'excelButton' },
-                    { extend: 'csv', text:'<i class="fas fa-file-csv"></i>', titleAttr:'Formato .csv', className: 'csvButton' },
-                    { extend: 'print', text:'<i class="fas fa-print"></i>', titleAttr:'Imprimir', className: 'printButton' }
+                    {
+                        extend: 'copy',
+                        text:'<i class="fas fa-copy"></i>',
+                        titleAttr:'Copiar',
+                        className: 'copyButton',
+                        exportOptions: {
+                            columns: [0,1,2]
+                        }
+                    },
+                    {
+                        extend: 'excel',
+                        text:'<i class="fas fa-file-excel"></i>',
+                        titleAttr:'Formato Excel',
+                        className: 'excelButton',
+                        exportOptions: {
+                            columns: [0,1,2]
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        text:'<i class="fas fa-file-csv"></i>',
+                        titleAttr:'Formato .csv',
+                        className: 'csvButton',
+                        exportOptions: {
+                            columns: [0,1,2]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text:'<i class="fas fa-print"></i>',
+                        titleAttr:'Imprimir',
+                        className: 'printButton',
+                        exportOptions: {
+                            columns: [0,1,2]
+                        }
+                    }
                 ]
             }
         });
