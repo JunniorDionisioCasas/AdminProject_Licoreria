@@ -359,7 +359,8 @@ return [
         [
             'text'    => 'Pedidos',
             'icon'    => 'fas fa-cash-register',
-            'submenu' => [
+            'url'  => '/pedidos',
+            /* 'submenu' => [
                 [
                     'text' => 'Pedidos',
                     'url'  => '/pedidos',
@@ -368,12 +369,13 @@ return [
                     'text' => 'Tipos',
                     'url'  => '/tipos-pedidos',
                 ],
-            ],
+            ], */
         ],
         [
             'text'    => 'Descuentos',
             'icon'    => 'fas fa-percent',
-            'submenu' => [
+            'url'     => '/descuentos',
+            /* 'submenu' => [
                 [
                     'text'    => 'Descuentos',
                     'url'     => '/descuentos',
@@ -382,7 +384,7 @@ return [
                     'text'    => 'Tipos',
                     'url'     => '/tipos-descuentos',
                 ],
-            ],
+            ], */
         ],
         ['header' => 'RECURSOS HUMANOS'],
         [

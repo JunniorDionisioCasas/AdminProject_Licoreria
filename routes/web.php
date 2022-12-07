@@ -47,6 +47,10 @@ Route::middleware([
     Route::get('/pedidos', function () {
         return view('administrative/sales/pedidos');
     });
+
+    Route::get('/registrar-nuevo-pedido', function () {
+        return view('administrative/sales/registrar-nuevo-pedido');
+    });
     
     Route::get('/tipos-pedidos', function () {
         return view('administrative/sales/tipos-pedidos');

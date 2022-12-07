@@ -176,7 +176,6 @@
 
         // proveedores logic
         
-        let tabla = document.getElementById("tabla_proveedores");
         let switchEstado = document.getElementById("estadoProveedor");
         let labelSttPrv = document.getElementById("labelSttPrv");
         let opcion, fila, id, nombre, anotaciones, estadoText;
@@ -326,7 +325,6 @@
                     .catch(error => console.log(error));
             }
         });
-
     </script>
 @stop
 

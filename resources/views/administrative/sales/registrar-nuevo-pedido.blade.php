@@ -1,16 +1,16 @@
 @extends('adminlte::page')
 
-@section('title', 'Productos')
+@section('title', 'Registro de nuevo pedido')
 
 @section('content_header')
-    <h1>Tabla Productos</h1>
+    <h1>Registrar nuevo pedido</h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
             <div class="container-fluid">
-                <button id="btnCrear" type="button" class="btn btn-secondary btn-crear">Nuevo producto</button>
+                <h5>Selecciones los productos</h5>
             </div>
         </div>
         <div class="card-body">
@@ -39,95 +39,16 @@
         </div>
     </div>
 
-    <div id="modalCRUD" class="modal" aria-labelledby="Formulario de nuevo producto" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Nuevo Producto</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="formProducto">
-                    <div class="modal-body">
-                        <div class="container-fluid">
-                            <input id="idProd" type="hidden">
-                            <div class="form-group row">
-                                <label for="nombreProd" class="col-sm-2 col-form-label">Nombre*</label>
-                                <div class="col-sm-10">
-                                    <input id="nombreProd" type="text" class="form-control" placeholder="Ingrese el nombre del producto" required>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="precioProd" class="col-sm-2 col-form-label">Precio*</label>
-                                <div class="input-group col-sm-10">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">S/</span>
-                                    </div>
-                                    <input id="precioProd" type="number" class="form-control" min="1" step="0.01" placeholder="Ingrese el precio del producto" required>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="stockProd" class="col-sm-2 col-form-label">Stock*</label>
-                                <div class="col-sm-10">
-                                    <input id="stockProd" type="number" class="form-control" min="0" placeholder="Ingrese el stock inicial" required>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="fechaVencProd" class="col-sm-7 col-form-label">Fecha de vencimiento (opcional)</label>
-                                <div class="col-sm-5">
-                                    <input id="fechaVencProd" type="date" class="form-control" placeholder="Ingrese la fecha">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-sm-4">
-                                    <label for="categoriaProd" class="col-sm-2 col-form-label">Categoria*</label>
-                                    <select id="categoriaProd" class="form-control" required>
-                                        <!-- Se insertan la lista de categorias mediante api -->
-                                    </select>
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    <label for="marcaProd" class="col-sm-2 col-form-label">Marca*</label>
-                                    <select id="marcaProd" class="form-control" required>
-                                        <!-- Se insertan la lista de marcas mediante api -->
-                                    </select>
-                                </div>
-                                <div class="form-group col-sm-4">
-                                    <label for="proveedorProd" class="col-sm-2 col-form-label">Proveedor*</label>
-                                    <select id="proveedorProd" class="form-control" required>
-                                        <!-- Se insertan la lista de proveedores mediante api -->
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="descProd" class="col-sm-3 col-form-label">Descripción</label>
-                                <div class="col-sm-9">
-                                    <textarea id="descProd" rows="2" class="form-control" placeholder="Ingrese una descripcion (opcional)"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Imagen*</label>
-                                <div class="input-group col-sm-9">
-                                    <div class="custom-file">
-                                        <input id="imagenProd" name="imagenProd" type="file" class="custom-file-input" accept="image/*">
-                                        <label class="custom-file-label" for="imagenProd" data-browse="Elegir">Seleccionar imagen</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="div-img-center">
-                                <img id="imgPreview" class="rounded-circle avatar-lg img-thumbnail img-preview" alt="product-image">
-                                <small class="form-text text-muted">800x960 px preferentemente</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
-                </form>
+    <div class="card">
+        <div class="card-header">
+            <div class="container-fluid">
+                <h5>Datos del cliente</h5>
             </div>
         </div>
+        <div class="card-body">
+        </div>
     </div>
+
 @stop
 
 @section('css')
@@ -162,11 +83,8 @@
                 },
                 {"data":"prd_imagen_path"},
                 {
-                    "defaultContent":`<button class="btn btn-xs btn-default text-primary mx-1 shadow btnEditar" title="Editar">
-                                        <i class="fa fa-lg fa-fw fa-pen"></i>
-                                    </button>
-                                    <button class="btn btn-xs btn-default text-danger mx-1 shadow btnEliminar" title="Eliminar">
-                                        <i class="fa fa-lg fa-fw fa-trash"></i>
+                    "defaultContent":`<button class="btn btn-default mx-1 shadow btnAdd" title="Añadir">
+                                        <i class="fas fa-cart-plus"></i>
                                     </button>`,
                     "orderable":false
                 }
@@ -183,52 +101,8 @@
             language: {
                 url: 'vendor/datatables-plugins/internationalisation/es-ES.json'
             },
-            dom:"<'row'<'col-sm-12 col-md-7'lB><'col-sm-12 col-md-5'f>>" +
-                "<'row'<'col-sm-12'tr>>" +
-                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-            buttons: {
-                buttons: [
-                    {
-                        extend: 'copy',
-                        text:'<i class="fas fa-copy"></i>',
-                        titleAttr:'Copiar',
-                        className: 'copyButton',
-                        exportOptions: {
-                            columns: [0,1,2,3,4,5,6]
-                        }
-                    },
-                    {
-                        extend: 'excel',
-                        text:'<i class="fas fa-file-excel"></i>',
-                        titleAttr:'Formato Excel',
-                        className: 'excelButton',
-                        exportOptions: {
-                            columns: [0,1,2,3,4,5,6]
-                        }
-                    },
-                    {
-                        extend: 'csv',
-                        text:'<i class="fas fa-file-csv"></i>',
-                        titleAttr:'Formato CSV',
-                        className: 'csvButton',
-                        exportOptions: {
-                            columns: [0,1,2,3,4,5,6]
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        text:'<i class="fas fa-print"></i>',
-                        titleAttr:'Imprimir',
-                        className: 'printButton',
-                        exportOptions: {
-                            columns: [0,1,2,3,4,5,6]
-                        }
-                    }
-                ]
-            }
         });
 
-        let tabla = document.getElementById("tabla_productos");
         let imagen = document.getElementById("imagenProd");
         let opcion, fila, id, nombre, precio, stock, fechaVenc, categoria, marca, proveedor, descripcion, imgPath;
 

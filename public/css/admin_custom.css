@@ -4,6 +4,10 @@
     border-color: #e34444;
 }
 
+.btnAdd, .btnPagar {
+    color: #e34444;
+}
+
 .div-img-center {
     text-align: center;
 }

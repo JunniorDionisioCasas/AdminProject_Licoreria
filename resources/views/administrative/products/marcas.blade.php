@@ -76,9 +76,6 @@
 @section('js')
     <script src="js/urlDomain.js"></script>
     <script>
-        let tabla = document.getElementById("tabla_marcas");
-        let opcion, fila, id, nombre, descripcion;
-
         let dataTableMarcas = $('#tabla_marcas').DataTable({
             "ajax":{
                 "url":urlDominio+'api/marcas',
@@ -151,6 +148,9 @@
                 ]
             }
         });
+
+        // CRUD logic
+        let opcion, fila, id, nombre, descripcion;
 
         //Crear
         $('#btnCrear').click(function (){
@@ -274,7 +274,6 @@
                     .catch(error => console.log(error));
             }
         });
-
     </script>
 @stop
 
