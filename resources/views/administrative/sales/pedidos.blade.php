@@ -28,6 +28,7 @@
                             <th scope="col">Fecha</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Estado code</th>
+                            <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="lista_pedidos">
@@ -77,7 +78,10 @@
                 "dataSrc":""
             },
             "columns":[
-                {"data":"id_pedido"},
+                {
+                    "data":"id_pedido",
+                    visible: false
+                },
                 {
                     "data":"cmp_serie",
                     render: function (data, type, row, meta) {
@@ -91,7 +95,12 @@
                 {
                     "data":"name",
                     render: function (data, type, row) {
-                        return data + ' ' + row['usr_apellidos'];
+                        let apellidos = row['usr_apellidos'];
+                        if ( apellidos ) {
+                            return data + ' ' + apellidos;
+                        } else {
+                            return data;
+                        }
                     },
                 },
                 {

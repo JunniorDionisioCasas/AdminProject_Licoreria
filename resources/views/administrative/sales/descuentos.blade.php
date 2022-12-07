@@ -23,7 +23,9 @@
                             <th scope="col">Nombre</th>
                             <th scope="col">Cantidad</th>
                             <th scope="col">Tipo</th>
+                            <th scope="col">Detalle</th>
                             <th scope="col">Código</th>
+                            <th scope="col">Producto</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Acciones</th>
                         </tr>
@@ -58,7 +60,7 @@
                             <div class="form-group row">
                                 <label for="cantidadDescuento" class="col-sm-3 col-form-label">Cantidad*</label>
                                 <div class="input-group col-sm-9">
-                                    <input id="cantidadDescuento" type="number" class="form-control" min="1" step="1" placeholder="Ingrese la cantidad del descuento" required>
+                                    <input id="cantidadDescuento" type="number" class="form-control" min="1" max="90" step="1" placeholder="Ingrese la cantidad del descuento" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text">%</span>
                                     </div>
@@ -134,14 +136,30 @@
                 {"data":"dsc_nombre"},
                 {
                     "data":"dsc_cantidad",
-                    render(v){
-                        return v+'%';
+                    render(data){
+                        return data+'%';
                     }
                 },
                 {"data":"tds_nombre"}, //tipo descuento
                 {
+                    "defaultContent":"<i>No aplicable</i>",
+                    "render": function ( data, type, row, meta ) {
+                        if (row["tds_nombre"] == 'Cupón') {
+                            return "Código: " + row["dsc_codigo"];
+                        } else if (row["tds_nombre"] == 'Individual') {
+                            return "Producto: " + row["prd_nombre"];
+                        } else {
+                            return "<i>No aplicable</i>";
+                        }
+                    }
+                },
+                {
                     "data":"dsc_codigo",
-                    "defaultContent":"<i>No aplicable</i>"
+                    visible: false
+                },
+                {
+                    "data":"prd_nombre",
+                    visible: false
                 },
                 {
                     "data":"dsc_estado",
@@ -178,7 +196,7 @@
                         titleAttr:'Copiar',
                         className: 'copyButton',
                         exportOptions: {
-                            columns: [0,1,2,3,4,5]
+                            columns: [0,1,2,3,4,7]
                         }
                     },
                     {
@@ -187,7 +205,7 @@
                         titleAttr:'Formato Excel',
                         className: 'excelButton',
                         exportOptions: {
-                            columns: [0,1,2,3,4,5]
+                            columns: [0,1,2,3,4,7]
                         }
                     },
                     {
@@ -196,7 +214,7 @@
                         titleAttr:'Formato .csv',
                         className: 'csvButton',
                         exportOptions: {
-                            columns: [0,1,2,3,4,5]
+                            columns: [0,1,2,3,4,7]
                         }
                     },
                     {
@@ -205,7 +223,7 @@
                         titleAttr:'Imprimir',
                         className: 'printButton',
                         exportOptions: {
-                            columns: [0,1,2,3,4,5]
+                            columns: [0,1,2,3,4,7]
                         }
                     }
                 ]
@@ -213,7 +231,7 @@
         });
 
         // CRUD logic
-        let opcion, fila, id, nombre, cantidad, tipo, codigo, estadoText;
+        let opcion, fila, id, nombre, cantidad, tipo, detalle, codigo, producto, estadoText;
         let switchEstado = document.getElementById("estadoDescuento");
         let labelSttDsc = document.getElementById("labelSttDsc");
         let select_tipos_descuentos = document.getElementById('tipoDescuento');
@@ -233,7 +251,7 @@
             }
         };
 
-        function changeTipoDescuento(id) {
+        function showAccordingElement(id) {
             switch(id) {
                 case '1':
                     console.log("1");
@@ -262,12 +280,12 @@
                 default:
                     console.log("none");;
             };
-        }
+        };
 
         select_tipos_descuentos.onchange = function(){
             console.log("select tipo descuento changed");
             console.log(select_tipos_descuentos.value);
-            changeTipoDescuento(select_tipos_descuentos.value);
+            showAccordingElement(select_tipos_descuentos.value);
         };
 
         function listar_tipos_descuentos() {
@@ -341,18 +359,39 @@
             id = fila.find('td:eq(0)').text();
             nombre = fila.find('td:eq(1)').text();
             cantidad = fila.find('td:eq(2)').text();
+            cantidad = parseInt(cantidad.substring(0,cantidad.length-1));
             tipo = fila.find('td:eq(3)').text();
-            codigo = fila.find('td:eq(4)').text();
-            estado = fila.find('td:eq(5)').text();
+            detalle = fila.find('td:eq(4)').text();
+            detalle = detalle.split(": ")[1];
+            estadoText = fila.find('td:eq(5)').text();
 
             $("#idDescuento").val(id);
             $("#nombreDescuento").val(nombre);
             $("#cantidadDescuento").val(cantidad);
-            $("#tipoDescuento").val(tipo);
-            $("#codigoDescuento").val(codigo);
+            $("#codigoDescuento").val(detalle);
             $("#estadoDescuento").val(estado);
 
-            changeTipoDescuento(tipo);
+            let idTipoDesc = $("#tipoDescuento option").filter(function() {
+                                return $(this).text() == tipo;
+                            }).val();
+            console.log("idTipoDesc: "+idTipoDesc);
+            $("#tipoDescuento").val(idTipoDesc);
+            showAccordingElement(idTipoDesc);
+
+            let idProducto = $("#listProductos option").filter(function() {
+                                return $(this).text() == detalle;
+                            }).val();
+            console.log("idProducto: "+idProducto);
+            $("#listProductos").val(idProducto);
+
+            if ( estadoText == "Activo" ) {
+                switchEstado.checked = true;
+                labelSttDsc.innerHTML = `<span class="badge badge-pill badge-success">Activo</span>`;
+            } else {
+                switchEstado.checked = false;
+                labelSttDsc.innerHTML = `<span class="badge badge-pill badge-danger">Inactivo</span>`;
+            }
+            estado = switchEstado.checked;
 
             $('.modal-header').css("background-color", "#007bff");
             $('.modal-title').text("Editar descuento");
@@ -400,9 +439,19 @@
             id = $('#idDescuento').val();
             nombre = $('#nombreDescuento').val();
             cantidad = $("#cantidadDescuento").val();
+            // estado = $("#estadoDescuento").val();
             tipo = $("#tipoDescuento").val();
+            if(tipo == '1'){
+                $("#codigoDescuento").val("");
+            } else if (tipo == '2') {
+                $("#codigoDescuento").val("");
+                $("#listProductos").val("");
+            } else {
+                $("#listProductos").val("");
+            }
             codigo = $("#codigoDescuento").val();
-            estado = $("#estadoDescuento").val();
+            producto = $("#listProductos").val();
+            console.log("producto: "+producto);
 
             if(opcion == 'crear'){
                 //api descuento, post
@@ -417,6 +466,7 @@
                                             dsc_cantidad: cantidad,
                                             id_tipo_descuento: tipo,
                                             dsc_codigo: codigo,
+                                            id_producto: producto,
                                             dsc_estado: estado
                                         })
                 })
@@ -449,6 +499,7 @@
                                             dsc_cantidad: cantidad,
                                             id_tipo_descuento: tipo,
                                             dsc_codigo: codigo,
+                                            id_producto: producto,
                                             dsc_estado: estado
                                         })
                 })

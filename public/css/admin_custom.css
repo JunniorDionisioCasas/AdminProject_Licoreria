@@ -16,6 +16,14 @@
     margin: auto;
 }
 
+.list-group-item {
+    padding: 0px 0px 10px;
+}
+
+.tdFooterTotal {
+    text-align: right;
+}
+
 /*preview de imagen seleccionada*/
 .img-preview {
     width:200px;
@@ -41,5 +49,8 @@
     background-color: #007bff;
 }
 .printButton{
-    background-color: #dc3545;
+    background-color: chocolate;
+}
+.pdfButton{
+    background-color: #F40F02;
 }
