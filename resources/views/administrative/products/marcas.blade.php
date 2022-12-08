@@ -172,7 +172,11 @@
 
             $("#idMarca").val(id);
             $("#nombreMarca").val(nombre);
-            $("#descMarca").val(descripcion);
+            if ( descripcion == "Sin descripción" ) {
+                $("#descMarca").val();
+            } else {
+                $("#descMarca").val(descripcion);
+            }
 
             $('.modal-header').css("background-color", "#007bff");
             $('.modal-title').text("Editar marca");

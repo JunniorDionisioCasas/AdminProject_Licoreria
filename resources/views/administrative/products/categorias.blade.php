@@ -173,7 +173,11 @@
 
             $("#idCatg").val(id);
             $("#nombreCatg").val(nombre);
-            $("#descCatg").val(descripcion);
+            if ( descripcion == "Sin descripción" ) {
+                $("#descCatg").val();
+            } else {
+                $("#descCatg").val(descripcion);
+            }
 
             $('.modal-header').css("background-color", "#007bff");
             $('.modal-title').text("Editar categoria");
