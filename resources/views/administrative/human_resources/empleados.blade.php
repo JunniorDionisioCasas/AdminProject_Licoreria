@@ -77,22 +77,24 @@
                                     <input id="emailEmpleado" type="email" class="form-control" placeholder="Ingrese el correo del empleado" required>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="passwordEmpleado" class="col-sm-5 col-form-label">Contraseña*</label>
+                            <div class="form-group row is-invalid">
+                                <label id="labelPasswEmp" for="passwordEmpleado" class="col-sm-5 col-form-label">Contraseña*</label>
                                 <div class="col-sm-7">
-                                    <input id="passwordEmpleado" type="password" class="form-control" pattern=".{8,}" placeholder="Ingrese la contraseña de la nueva cuenta">
+                                    <input id="passwordEmpleado" type="password" class="form-control" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(.{8,})" placeholder="Ingrese una contraseña">
+                                    <small class="form-text text-muted">Mínimo de 8 caracteres, que contengan números, símbolos y letras mayúsculas y minúsculas.</small>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="passwordConfEmpleado" class="col-sm-5 col-form-label">Confirmar contraseña*</label>
+                                <label id="labelConfPasswEmp" for="passwordConfEmpleado" class="col-sm-5 col-form-label">Confirmar contraseña*</label>
                                 <div class="col-sm-7">
-                                    <input id="passwordConfEmpleado" type="password" class="form-control" pattern=".{8,}" placeholder="Confirme la contraseña">
+                                    <input id="passwordConfEmpleado" type="password" class="form-control" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(.{8,})" placeholder="Confirme la contraseña">
+                                <small class="form-text text-muted">Vuelva a ingresar la contraseña.</small>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="fechaNacEmpleado" class="col-sm-5 col-form-label">Fecha de nacimiento (opcional)</label>
                                 <div class="col-sm-7">
-                                    <input id="fechaNacEmpleado" type="date" class="form-control" max="{{date('Y-m-d');}}">
+                                    <input id="fechaNacEmpleado" type="date" class="form-control" max="{{date('Y-m-d');}}" placeholder="Mes/Día/Año">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -114,6 +116,7 @@
                                 <img id="imgPreview" class="rounded-circle avatar-lg img-thumbnail img-preview" alt="empleado-image">
                                 <small class="form-text text-muted">800x800 px preferentemente</small>
                             </div>
+                            <small class="form-text text-muted">*: Campo obligatorio a rellenar.</small>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -142,6 +145,7 @@
                 "type": "GET",
                 "dataSrc":""
             },
+            rowId: 'id',
             "columns":[
                 {"data":"id"},
                 {
@@ -273,12 +277,28 @@
 
         listar_cargos();
 
+        function removeValidatedStyle(elementId) {
+            document.getElementById(elementId).classList.remove("is-invalid");
+        }
+
+        function invalidInputAlert(msg, title) {
+            toastr.error(msg, title);
+        }
+
+        inputConfPasswEmp.addEventListener("input", function(){removeValidatedStyle('passwordConfEmpleado')});
+
+        inputPasswEmp.oninvalid = (event) => {
+            invalidInputAlert("La contraseña debe ser mínimo de 8 caracteres, que contengan números, símbolos y letras mayúsculas y minúsculas.", 'Contraseña insegura');
+        };
+
         //Crear
         $('#btnCrear').click(function (){
             opcion = 'crear';
-            $("#formCargo").trigger("reset");
+            $("#formEmpleado").trigger("reset");
             $('.modal-header').css("background-color", "#6c757d");
             $('.modal-title').text("Nuevo empleado(a)");
+            $('#labelConfPasswEmp').text("Confirmar contraseña");
+            $("#imgPreview").attr("src", "images/placeholder.png");
             $('#passwordEmpleado').attr('required', 'required');
             $('#passwordConfEmpleado').attr('required', 'required');
             $('#passwordEmpleado').attr("placeholder", "Ingrese una contraseña");
@@ -290,17 +310,22 @@
         $(document).on('click', '.btnEditar', function (){
             opcion = 'editar';
             fila = $(this).closest('tr');
-            // Display an info toast with no title
-            toastr.info('Are you the 6 fingered man?')
 
             id = fila.find('td:eq(0)').text();
-            nombre = fila.find('td:eq(1)').text();
-            apellido = fila.find('td:eq(2)').text();
-            cargo = fila.find('td:eq(3)').text();
-            correo = fila.find('td:eq(4)').text();
-            direccion = fila.find('td:eq(5)').text();
-            imagen = fila.find('td:eq(6)').text();
-            fechaNac = fila.find('td:eq(7)').text();
+            nombre = dataTableEmpleados.row(fila).data()['name'];
+            apellido = dataTableEmpleados.row(fila).data()['usr_apellidos'];
+            cargo = fila.find('td:eq(2)').text();
+            correo = fila.find('td:eq(3)').text();
+            direccion = fila.find('td:eq(4)').text();
+            imagen = dataTableEmpleados.row(fila).data()['profile_photo_path'];
+            fechaNac = dataTableEmpleados.row(fila).data()['usr_fecha_nacimiento'];
+
+            console.log(dataTableEmpleados.row(fila).data()['name']);
+            console.log(dataTableEmpleados.row(fila).id());
+            console.log("nombre: "+nombre);
+            console.log("apellido: "+apellido);
+            console.log("imagen: "+imagen);
+            console.log("fechaNac: "+fechaNac);
 
             $("#idEmpleado").val(id);
             $("#nombreEmpleado").val(nombre);
@@ -327,10 +352,12 @@
 
             $('.modal-header').css("background-color", "#007bff");
             $('.modal-title').text("Editar empleado(a)");
+            $('#labelPasswEmp').text("Cambiar contraseña (opcional)");
+            $('#labelConfPasswEmp').text("Confirmar nueva contraseña");
             $('#passwordEmpleado').removeAttr('required');
             $('#passwordConfEmpleado').removeAttr('required');
-            $('#passwordEmpleado').attr("placeholder", "Ingrese una nueva contraseña si desea actualizar");
-            $('#passwordConfEmpleado').attr("placeholder", "Confirme la contraseña a actualizar");
+            $('#passwordEmpleado').attr("placeholder", "Ingrese una nueva contraseña");
+            $('#passwordConfEmpleado').attr("placeholder", "Confirme la nueva contraseña");
             $('#modalCRUD').modal('show');
         })
 
@@ -385,8 +412,12 @@
             fechaNac = $('#fechaNacEmpleado').val();
 
             // validate input
+            // $("#formEmpleado").addClass("was-validated");
             if ( password !== passwordConfirm ) {
-                Alert;
+                toastr.warning('La contraseña y la confirmación no coinciden');
+                inputConfPasswEmp.classList.add("is-invalid");
+                inputConfPasswEmp.focus();
+                return false;
             }
 
             let formData = new FormData();
@@ -395,22 +426,27 @@
             formData.append('usr_apellidos', apellido);
             formData.append('id_cargo', cargo);
             formData.append('email', correo);
-            formData.append('password', password);
-            formData.append('password_confirmation', passwordConfirm);
             formData.append('drc_direccion', direccion);
             formData.append('usr_fecha_nacimiento', fechaNac);
-            if(imagen.files.length !== 0){
-                formData.append('profile_photo_path', imagen.files[0]);
+            if( imagen ) {
+                if(imagen.files.length !== 0){
+                    formData.append('profile_photo_path', imagen.files[0]);
+                }
+            }
+            
+            //prueba de obtencio de datos del form
+            for (const pair of formData) {
+                console.log(`${pair[0]}: ${pair[1]}\n`);
             }
 
             if(opcion == 'crear'){
+                formData.append('password', password);
+                formData.append('password_confirmation', passwordConfirm);
+
                 //api empleado, post
                 let url = urlDominio + 'api/empleado';
                 fetch(url, {
                     method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
                     body: formData
                 })
                     .then(res => res.json())
@@ -431,11 +467,14 @@
             }
             if(opcion == 'editar'){
                 // validate input
-                if ( password ) {
-                    if ( password === passwordConfirm ) {
-                        ;
+                if ( password  || passwordConfirm ) {
+                    if ( password !== passwordConfirm ) {
+                        console.log("contraseñas no coinciden");
+                    } else {
+                        formData.append('password', password);
+                        formData.append('password_confirmation', passwordConfirm);
                     }
-                    console.log("hay contraseñas");
+                    console.log("hay al menos una contraseña");
                 } else {
                     console.log("no hay contraseñas");
                 }
@@ -443,13 +482,19 @@
                 //api empleado (update)
                 let url = urlDominio + 'api/empleado/'+id;
                 fetch(url, {
-                    method: 'PUT',
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: formData
+                    method: 'POST', //cant use PUT with formData
+                    body: formData //formData neccesary for file upload
                 })
-                    .then(res => res.json())
+                    .then(res => {
+                        console.log(res);
+                        if ( res.ok ) {
+                            return res.json();
+                        } else {
+                            return res.text().then(
+                                text => { throw text }
+                            );
+                        }
+                    })
                     .then(success => {
                         console.log(success);
 
@@ -464,8 +509,26 @@
 
                         $('#modalCRUD').modal('hide');
                     })
-                    .catch(error => console.log(error));
+                    .catch(error => {
+                        // console.log(JSON.parse(error));
+                        let response = JSON.parse(error);
+                        let errores = response.validator_errors;
+                        console.log(errores);
+                        for (let msg in errores ) {
+                            toastr.error(errores[msg], 'Error en '+msg);
+                        }
+                    });
             }
+        });
+
+        $('#imagenEmpleado').on('change',function(e){
+            let reader = new FileReader();
+            let fileName = imagen.files[0].name;
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+            reader.onload = function(e) {
+                document.getElementById("imgPreview").src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
         });
     </script>
 @stop

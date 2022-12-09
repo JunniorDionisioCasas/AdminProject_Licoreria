@@ -59,7 +59,7 @@
                                     <div class="custom-control custom-switch">
                                         <input id="accesoSistemaCargo" class="custom-control-input" type="checkbox" role="switch" checked>
                                         <label id="labelAccsSist" for="accesoSistemaCargo" class="custom-control-label">
-                                            <span class="badge badge-pill badge-success">Con acceso</span>
+                                            <span class="badge badge-pill badge-primary">Con acceso</span>
                                         </label>
                                     </div>
                                 </div>
@@ -90,6 +90,8 @@
 @section('js')
     <script src="js/urlDomain.js"></script>
     <script>
+        let badgeElmntSwitchAccs = `<span class="badge badge-pill badge-primary">Con acceso</span>`;
+        let badgeElmntSwitchNoAccs = `<span class="badge badge-pill badge-secondary">Sin acceso</span>`;
         // datatables config
         let dataTableCargos = $('#tabla_cargos').DataTable({
             "ajax":{
@@ -104,9 +106,9 @@
                     "data":"crg_acceso_admin",
                     "render": function ( data, type, row, meta ) {
                         if (data === 1) {
-                            return `<span class="badge badge-pill badge-primary">Con acceso</span>`;
+                            return badgeElmntSwitchAccs;
                         } else {
-                            return `<span class="badge badge-pill badge-secondary">Sin acceso</span>`;
+                            return badgeElmntSwitchNoAccs;
                         }
                     }
                 },
@@ -183,9 +185,9 @@
         switchAccsSist.onclick = function(){
             estado = !estado;
             if (estado) {
-                labelAccsSist.innerHTML = `<span class="badge badge-pill badge-primary">Con acceso</span>`;
+                labelAccsSist.innerHTML = badgeElmntSwitchAccs;
             } else {
-                labelAccsSist.innerHTML = `<span class="badge badge-pill badge-secondary">Sin acceso</span>`;
+                labelAccsSist.innerHTML = badgeElmntSwitchNoAccs;
             }
         };
 
@@ -195,6 +197,7 @@
             $("#formCargo").trigger("reset");
             $('.modal-header').css("background-color", "#6c757d");
             $('.modal-title').text("Nuevo cargo");
+            labelAccsSist.innerHTML = badgeElmntSwitchAccs;
             $('#modalCRUD').modal('show');
         })
 
@@ -217,12 +220,18 @@
             }
             if ( estadoText == "Con acceso" ) {
                 switchAccsSist.checked = true;
-                labelAccsSist.innerHTML = `<span class="badge badge-pill badge-primary">Con acceso</span>`;
+                labelAccsSist.innerHTML = badgeElmntSwitchAccs;
             } else {
                 switchAccsSist.checked = false;
-                labelAccsSist.innerHTML = `<span class="badge badge-pill badge-secondary">Sin acceso</span>`;
+                labelAccsSist.innerHTML = badgeElmntSwitchNoAccs;
             }
             estado = switchAccsSist.checked;
+            
+            // disable for default users, client and admin
+            if ( id == 1 || id == 2 ) { //1=client, 2=admin
+                switchAccsSist.disabled = true;
+                labelAccsSist.innerHTML += ` <small class="text-muted">Predeterminado</small>`;
+            }
 
             $('.modal-header').css("background-color", "#007bff");
             $('.modal-title').text("Editar cargo");
@@ -323,6 +332,10 @@
                     })
                     .catch(error => console.log(error));
             }
+        });
+
+        $('#modalCRUD').on('hidden.bs.modal', function (event) {
+            switchAccsSist.disabled = false;
         });
     </script>
 @stop
