@@ -13,7 +13,7 @@
                 <h5>Selecciones los productos</h5>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body text-white bg-gradient-info mb-3">
             <div class="table-responsive">
                 <table id="tabla_productos" class="table table-striped">
                     <thead>
@@ -39,13 +39,28 @@
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-header">
-            <div class="container-fluid">
-                <h5>Datos del cliente</h5>
+    <div class="row">
+        <div class="col-md">
+            <div class="card">
+                <div class="card-header">
+                    <div class="container-fluid">
+                        <h5>Datos del cliente</h5>
+                    </div>
+                </div>
+                <div class="card-body text-white bg-gradient-primary mb-3">
+                </div>
             </div>
         </div>
-        <div class="card-body">
+        <div class="col-md">
+            <div class="card">
+                <div class="card-header">
+                    <div class="container-fluid">
+                        <h5>Carrito del cliente</h5>
+                    </div>
+                </div>
+                <div class="card-body text-white bg-gradient-success mb-3">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -105,87 +120,6 @@
 
         let imagen = document.getElementById("imagenProd");
         let opcion, fila, id, nombre, precio, stock, fechaVenc, categoria, marca, proveedor, descripcion, imgPath;
-
-        function listar_categorias() {
-            const url = urlDominio+'api/categorias';
-
-            let select_categorias = document.getElementById('categoriaProd');
-
-            //llamado al api categorias, index
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-                .then(res => res.json(), console.log('Cargando API categorias'))
-                .then(res => {
-                    console.log(res);
-                    res.forEach(categoria => {
-                        // select_categorias.append($("<option />").val(categoria.id_categoria).text(categoria.ctg_nombre));
-
-                        let option_elem = document.createElement('option');
-                        option_elem.value = categoria.id_categoria;
-                        option_elem.textContent = categoria.ctg_nombre;
-                        select_categorias.appendChild(option_elem);
-                    });
-                })
-                .catch(error => console.log(error));
-        };
-
-        function listar_marcas() {
-            const url = urlDominio+'api/marcas';
-
-            let select_marcas = document.getElementById('marcaProd');
-
-            //llamado al api marcas, index
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-            .then(res => res.json(), console.log('Cargando API marcas'))
-            .then(res => {
-                console.log(res);
-                res.forEach(marca => {
-                    let option_elem = document.createElement('option');
-                    option_elem.value = marca.id_marca;
-                    option_elem.textContent = marca.mrc_nombre;
-                    select_marcas.appendChild(option_elem);
-                });
-            })
-            .catch(error => console.log(error));
-        };
-
-        function listar_proveedores() {
-            const url = urlDominio+'api/proveedores';
-
-            let select_proveedores = document.getElementById('proveedorProd');
-
-            //llamado al api proveedores, index
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-            .then(res => res.json(), console.log('Cargando API proveedores'))
-            .then(res => {
-                console.log(res);
-                res.forEach(proveedor => {
-                    let option_elem = document.createElement('option');
-                    option_elem.value = proveedor.id_proveedor;
-                    option_elem.textContent = proveedor.prv_nombre;
-                    select_proveedores.appendChild(option_elem);
-                });
-            })
-            .catch(error => console.log(error));
-        };
-
-        listar_categorias();
-        listar_marcas();
-        listar_proveedores();
 
         //Crear
         $('#btnCrear').click(function (){
