@@ -103,7 +103,7 @@
                                     <input id="direccionEmpleado" type="text" class="form-control" placeholder="Ingrese la dirección del empleado">
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group row" style="display: none">
                                 <label class="col-sm-5 col-form-label">Foto de perfil (opcional)</label>
                                 <div class="input-group col-sm-7">
                                     <div class="custom-file">
@@ -112,7 +112,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="div-img-center">
+                            <div class="div-img-center" style="display: none">
                                 <img id="imgPreview" class="rounded-circle avatar-lg img-thumbnail img-preview" alt="empleado-image">
                                 <small class="form-text text-muted">800x800 px preferentemente</small>
                             </div>
