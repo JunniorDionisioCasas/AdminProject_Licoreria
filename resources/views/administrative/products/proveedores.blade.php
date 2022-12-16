@@ -108,7 +108,7 @@
                 {
                     "data":"prv_estado",
                     "render": function ( data, type, row, meta ) {
-                        if (data === 1) {
+                        if (data == 1) {
                             return `<span class="badge badge-pill badge-success">Activo</span>`;
                         } else {
                             return `<span class="badge badge-pill badge-danger">Inactivo</span>`;
