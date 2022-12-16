@@ -148,7 +148,7 @@
                                             <i class="fas fa-eye"></i>
                                         </button>`;
                         
-                        switch(row['pdd_estado']) {
+                        switch(parseInt(row['pdd_estado'])) {
                             case 0:
                                 return btnVer+`<button class="btn btn-xs btn-default mx-1 shadow btnPagar" title="Ya pagó">
                                             <i class="fas fa-money-bill-wave"></i>
