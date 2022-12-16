@@ -144,7 +144,10 @@
                 "dataSrc":""
             },
             "columns":[
-                {"data":"id_producto"},
+                {
+                    "data":"id_producto",
+                    visible: false
+                },
                 {"data":"prd_nombre"},
                 {"data":"prd_precio"},
                 {"data":"prd_stock"},
@@ -160,7 +163,10 @@
                     "defaultContent":"<i>Sin descripción</i>",
                     "orderable":false
                 },
-                {"data":"prd_imagen_path"},
+                {
+                    "data":"prd_imagen_path",
+                    visible: false
+                },
                 {
                     "defaultContent":`<button class="btn btn-xs btn-default text-primary mx-1 shadow btnEditar" title="Editar">
                                         <i class="fa fa-lg fa-fw fa-pen"></i>

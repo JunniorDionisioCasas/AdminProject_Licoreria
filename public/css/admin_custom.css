@@ -4,6 +4,21 @@
     border-color: #e34444;
 }
 
+.display-in-flex {
+    display: inline-flex;
+}
+.vertical-margin {
+    margin: 10px 0px;
+}
+#btnChangeClt {
+    display: block;
+    margin: 20px auto 0px;
+}
+
+.btn-redirect-crud {
+    margin: auto 0px auto auto;
+}
+
 .btnAdd, .btnPagar {
     color: #e34444;
 }
@@ -30,10 +45,18 @@
     height:200px
 }
 
-/*columna imagen path oculta*/
-#tabla_productos tr td:nth-child(10), #tabla_productos th:nth-child(10) {
+/*columna y header de id oculta*/
+#tabla_cliente_carrito tr td:nth-child(1), #tabla_cliente_carrito th:nth-child(1) {
     display: none;
 }
+/* client table filter custom style */
+#tabla_clientes_filter label input {
+    width: 115px;
+}
+#divSelectedClient {
+    padding-inline: inherit;
+}
+
 /* data tables styles */
 .dataTables_length {
     display: inline-flex;

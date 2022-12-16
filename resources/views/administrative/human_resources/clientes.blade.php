@@ -8,7 +8,7 @@
 
 @section('content')
 
-<div class="card">
+    <div class="card">
         <div class="card-header">
             <div class="container-fluid">
                 <button id="btnCrear" type="button" class="btn btn-secondary btn-crear">Nuevo cliente</button>
