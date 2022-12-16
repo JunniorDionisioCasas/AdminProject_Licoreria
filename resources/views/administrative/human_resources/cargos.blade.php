@@ -105,7 +105,7 @@
                 {
                     "data":"crg_acceso_admin",
                     "render": function ( data, type, row, meta ) {
-                        if (data === 1) {
+                        if (data == 1) {
                             return badgeElmntSwitchAccs;
                         } else {
                             return badgeElmntSwitchNoAccs;
