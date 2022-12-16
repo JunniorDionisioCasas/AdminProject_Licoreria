@@ -117,7 +117,7 @@
                 {
                     "data":"pdd_estado",
                     render: function (data, type, row) {
-                        switch(data) {
+                        switch(parseInt(data)) {
                             case 0:
                                 return `<span class="badge badge-pill badge-danger">Por pagar</span>`;
                                 break;
