@@ -232,7 +232,7 @@
 
         $(document).on('click', ".btnPagar", function (){
             fila = $(this).closest('tr');
-            id = parseInt(fila.find('td:eq(0)').text());
+            id = dataTableProductos.row(fila).data()['id_pedido'];
             Swal.fire({
                 title: 'Confirma pedido pagado?',
                 showCancelButton: true,
