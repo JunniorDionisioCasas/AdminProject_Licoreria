@@ -306,6 +306,7 @@
                 method: 'GET',
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": "Bearer {{Auth::user()->createToken('my-token')->plainTextToken}}"
                 }
             })
             .then(res => res.json())

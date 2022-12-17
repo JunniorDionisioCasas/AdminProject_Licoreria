@@ -23,6 +23,8 @@
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellidos</th>
                             <th scope="col">Email</th>
+                            <th scope="col">Provincia</th>
+                            <th scope="col">Distrito</th>
                             <th scope="col">Dirección</th>
                             <th scope="col">Profile photo path</th>
                             <th scope="col">Fecha nacimiento</th>
@@ -90,11 +92,23 @@
                             </div>
                             <div class="form-group row">
                                 <label for="direccionCliente" class="col-sm-5 col-form-label">Dirección (opcional)</label>
-                                <div class="col-sm-7">
+                                <div class="col-sm-4">
+                                    <select id="selectProvincia" class="form-control">
+                                        <option value="">Provincia</option>
+                                        <!-- Se insertan la lista de provincias mediante api -->
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <select id="selectDistrito" class="form-control">
+                                        <option value="">Distrito</option>
+                                        <!-- Se insertan la lista de distritos mediante api -->
+                                    </select>
+                                </div>
+                                <div class="col-sm-7 divInputDireccion">
                                     <input id="direccionCliente" type="text" class="form-control" placeholder="Ingrese la dirección del cliente">
                                 </div>
                             </div>
-                            <div class="form-group row" style="display: none">
+                            <div class="form-group row">
                                 <label class="col-sm-5 col-form-label">Foto de perfil (opcional)</label>
                                 <div class="input-group col-sm-7">
                                     <div class="custom-file">
@@ -103,9 +117,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="div-img-center" style="display: none">
+                            <div class="div-img-center">
                                 <img id="imgPreview" class="rounded-circle avatar-lg img-thumbnail img-preview" alt="cliente-image">
-                                <small class="form-text text-muted">400x400 px preferentemente</small>
+                                <small class="form-text text-muted">500x500 px preferentemente</small>
                             </div>
                             <small class="form-text text-muted">*: Campo obligatorio a rellenar.</small>
                         </div>
@@ -159,6 +173,14 @@
                 },
                 {"data":"email"},
                 {
+                    "data":"id_provincia",
+                    visible: false
+                },
+                {
+                    "data":"id_distrito",
+                    visible: false
+                },
+                {
                     "data":"drc_direccion",
                     "defaultContent":`<i>${nullCellText}</i>`
                 },
@@ -195,7 +217,7 @@
                         titleAttr:'Copiar',
                         className: 'copyButton',
                         exportOptions: {
-                            columns: [0,1,3,4,5]
+                            columns: [0,1,3,4,7]
                         }
                     },
                     {
@@ -204,7 +226,7 @@
                         titleAttr:'Formato Excel',
                         className: 'excelButton',
                         exportOptions: {
-                            columns: [0,1,3,4,5]
+                            columns: [0,1,3,4,7]
                         }
                     },
                     {
@@ -213,7 +235,7 @@
                         titleAttr:'Formato .csv',
                         className: 'csvButton',
                         exportOptions: {
-                            columns: [0,1,3,4,5]
+                            columns: [0,1,3,4,7]
                         }
                     },
                     {
@@ -222,7 +244,7 @@
                         titleAttr:'Imprimir',
                         className: 'printButton',
                         exportOptions: {
-                            columns: [0,1,3,4,5]
+                            columns: [0,1,3,4,7]
                         }
                     }
                 ]
@@ -232,7 +254,80 @@
         // CRUD logic
         let inputPasswClt = document.getElementById("passwordCliente");
         let inputConfPasswClt = document.getElementById("passwordConfCliente");
-        let opcion, fila, id, nombre, apellido, cargo, correo, direccion, imagen, fechaNac;
+        let selectProvincia = document.getElementById("selectProvincia");
+        let selectDistrito = document.getElementById("selectDistrito");
+        let imagen = document.getElementById("imagenCliente");
+        let opcion, fila, id, nombre, apellido, cargo, correo, direccion, imgPath, fechaNac, idProvincia, idDistrito;
+        
+        function listar_provincias() {
+            const url = urlDominio+'api/provincias';
+
+            //llamado al api provincias, index
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then(res => res.json())
+            .then(res => {
+                res.forEach(provincia => {
+                    let option_elem = document.createElement('option');
+                    option_elem.value = provincia.id_provincia;
+                    option_elem.textContent = provincia.prv_nombre;
+                    selectProvincia.appendChild(option_elem);
+                });
+            })
+            .catch(error => console.log(error));
+        };
+
+        /* lista los distritos segun la provincia seleccionada(idProvinciaSlct), y selecciona un distrito(slctDistrito)  */
+        function list_dst_segun_prv_and_slct(idProvinciaSlct, slctDistrito) {
+            const url = urlDominio+'api/distritos_by_provincia/'+idProvinciaSlct;
+
+            //llamado al api distritos_by_provincia, index
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then(res => res.json())
+            .then(res => {
+                res.forEach(distrito => {
+                    let option_elem = document.createElement('option');
+                    option_elem.value = distrito.id_distrito;
+                    option_elem.textContent = distrito.dst_nombre;
+                    selectDistrito.appendChild(option_elem);
+                });
+
+                selectElement('selectDistrito', slctDistrito);
+            })
+            .catch(error => console.log(error));
+        };
+
+        listar_provincias();
+        
+        function selectElement(id, valueToSelect) {    
+            let element = document.getElementById(id);
+            element.value = valueToSelect;
+        };
+
+        function removeOptions(selectElement) {
+            let i, L = selectElement.options.length - 1;
+            for(i = L; i > 0; i--) {
+                selectElement.remove(i);
+            }
+        };
+
+        selectProvincia.onchange = function(){
+            console.log("select province changed");
+            console.log(selectProvincia.value);
+            removeOptions(selectDistrito);
+            if(selectProvincia.value) {
+                list_dst_segun_prv_and_slct(selectProvincia.value, '');
+            }
+        };
 
         function removeValidatedStyle(elementId) {
             document.getElementById(elementId).classList.remove("is-invalid");
@@ -260,6 +355,7 @@
             $('#passwordConfCliente').attr('required', 'required');
             $('#passwordCliente').attr("placeholder", "Ingrese una contraseña");
             $('#passwordConfCliente').attr("placeholder", "Confirme la contraseña");
+            removeOptions(selectDistrito);
             $('#modalCRUD').modal('show');
         })
 
@@ -268,19 +364,23 @@
             opcion = 'editar';
             fila = $(this).closest('tr');
 
+            removeOptions(selectDistrito);
+
             id = fila.find('td:eq(0)').text();
             nombre = dataTableClientes.row(fila).data()['name'];
             apellido = dataTableClientes.row(fila).data()['usr_apellidos'];
             correo = fila.find('td:eq(2)').text();
+            idProvincia = dataTableClientes.row(fila).data()['id_provincia'];
+            idDistrito = dataTableClientes.row(fila).data()['id_distrito'];
             direccion = fila.find('td:eq(3)').text();
-            imagen = dataTableClientes.row(fila).data()['profile_photo_path'];
+            imgPath = dataTableClientes.row(fila).data()['profile_photo_path'];
             fechaNac = dataTableClientes.row(fila).data()['usr_fecha_nacimiento'];
 
             console.log(dataTableClientes.row(fila).data()['name']);
             console.log(dataTableClientes.row(fila).id());
             console.log("nombre: "+nombre);
             console.log("apellido: "+apellido);
-            console.log("imagen: "+imagen);
+            console.log("imagen: "+imgPath);
             console.log("fechaNac: "+fechaNac);
 
             $("#idCliente").val(id);
@@ -290,13 +390,17 @@
             $("#fechaNacCliente").val(fechaNac);
 
             if ( direccion == nullCellText ) {
-                $("#direccionCliente").val();
+                $("#direccionCliente").val('');
+                selectElement('selectProvincia', '');
+                selectElement('selectDistrito', '');
             } else {
+                selectElement('selectProvincia', idProvincia);
+                list_dst_segun_prv_and_slct(idProvincia, idDistrito);
                 $("#direccionCliente").val(direccion);
             }
 
-            if ( imagen ) {
-                $("#imgPreview").attr("src", imagen);
+            if ( imgPath ) {
+                $("#imgPreview").attr("src", imgPath);
             } else {
                 $("#imgPreview").attr("src", "images/placeholder.png");
             }
@@ -357,6 +461,8 @@
             correo = $('#emailCliente').val();
             password = $('#passwordCliente').val();
             passwordConfirm = $('#passwordConfCliente').val();
+            idProvincia = $('#selectProvincia').val();
+            idDistrito = $('#selectDistrito').val();
             direccion = $('#direccionCliente').val();
             fechaNac = $('#fechaNacCliente').val();
 
@@ -373,12 +479,12 @@
             formData.append('name', nombre);
             formData.append('usr_apellidos', apellido);
             formData.append('email', correo);
+            formData.append('id_provincia', idProvincia);
+            formData.append('id_distrito', idDistrito);
             formData.append('drc_direccion', direccion);
             formData.append('usr_fecha_nacimiento', fechaNac);
-            if( imagen ) {
-                if(imagen.files.length !== 0){
-                    formData.append('profile_photo_path', imagen.files[0]);
-                }
+            if(imagen.files.length !== 0){
+                formData.append('profile_photo_path', imagen.files[0]);
             }
             
             //prueba de obtencio de datos del form

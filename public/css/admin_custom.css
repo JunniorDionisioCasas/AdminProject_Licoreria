@@ -39,6 +39,11 @@
     text-align: right;
 }
 
+/* user direccion style */
+.divInputDireccion {
+    margin: 5px 0px auto auto;
+}
+
 /*preview de imagen seleccionada*/
 .img-preview {
     width:200px;

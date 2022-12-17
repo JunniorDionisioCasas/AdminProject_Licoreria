@@ -56,13 +56,13 @@ class User extends Authenticatable
      * @var array
      */
     protected $appends = [
-        'profile_photo_url',
+        // 'profile_photo_url',
     ];
 
     //functions needed by AdminLTE
     public function adminlte_image()
     {
-        return 'https://picsum.photos/300/300';
+        return \Auth::user()->profile_photo_path;//'https://picsum.photos/300/300';
     }
 
     public function adminlte_desc()
