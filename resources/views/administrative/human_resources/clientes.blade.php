@@ -217,7 +217,7 @@
                         titleAttr:'Copiar',
                         className: 'copyButton',
                         exportOptions: {
-                            columns: [0,1,3,4,7]
+                            columns: [0,1,3,6]
                         }
                     },
                     {
@@ -226,7 +226,7 @@
                         titleAttr:'Formato Excel',
                         className: 'excelButton',
                         exportOptions: {
-                            columns: [0,1,3,4,7]
+                            columns: [0,1,3,6]
                         }
                     },
                     {
@@ -235,7 +235,7 @@
                         titleAttr:'Formato .csv',
                         className: 'csvButton',
                         exportOptions: {
-                            columns: [0,1,3,4,7]
+                            columns: [0,1,3,6]
                         }
                     },
                     {
@@ -244,7 +244,7 @@
                         titleAttr:'Imprimir',
                         className: 'printButton',
                         exportOptions: {
-                            columns: [0,1,3,4,7]
+                            columns: [0,1,3,6]
                         }
                     }
                 ]
