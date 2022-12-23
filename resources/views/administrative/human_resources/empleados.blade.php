@@ -96,7 +96,7 @@
                             <div class="form-group row">
                                 <label for="fechaNacEmpleado" class="col-sm-5 col-form-label">Fecha de nacimiento (opcional)</label>
                                 <div class="col-sm-7">
-                                    <input id="fechaNacEmpleado" type="date" class="form-control" max="{{date('Y-m-d');}}" placeholder="Mes/Día/Año">
+                                    <input id="fechaNacEmpleado" type="date" class="form-control" max="{{Carbon\Carbon::now()->subYears(18)->format('Y-m-d')}}" placeholder="Mes/Día/Año">
                                 </div>
                             </div>
                             <div class="form-group row">
