@@ -55,7 +55,7 @@
     display: none;
 }
 /* client table filter custom style */
-#tabla_clientes_filter label input {
+div.col-lg-12.col-xl-6 #tabla_clientes_filter label input {
     width: 115px;
 }
 #divSelectedClient {
