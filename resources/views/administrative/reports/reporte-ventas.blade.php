@@ -172,7 +172,10 @@
                         footer: true,
                         title: document.title,
                         messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now()->locale('es_PE')->isoFormat('LLLL')}}",
-                    },,
+                        excelStyles: {
+                            template: 'blue_medium',
+                        }
+                    },
                     {
                         extend: 'pdfHtml5',
                         text: '<i class="fas fa-file-pdf"></i>',

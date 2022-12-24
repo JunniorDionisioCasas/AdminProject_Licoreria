@@ -146,6 +146,9 @@
                         },
                         title: document.title,
                         messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now()->locale('es_PE')->isoFormat('LLLL')}}",
+                        excelStyles: {
+                            template: 'blue_medium',
+                        }
                     },
                     {
                         extend: 'pdfHtml5',
