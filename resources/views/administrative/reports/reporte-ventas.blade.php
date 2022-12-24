@@ -93,7 +93,7 @@
 @section('js')
     <script src="js/urlDomain.js"></script>
     <script>
-        let dateFValue = "{{Carbon\Carbon::now()->subYear()->format('Y-m-d')}}",
+        let dateFValue = "{{Carbon\Carbon::now('-05:00')->subYear()->format('Y-m-d')}}",
          dateUValue = "{{date('Y-m-d')}}",
          idPrdSelected = 0,
          idTipoPddSelected = 0,
@@ -171,7 +171,7 @@
                         },
                         footer: true,
                         title: document.title,
-                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now()->locale('es_PE')->isoFormat('LLLL')}}",
+                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                         excelStyles: {
                             template: 'blue_medium',
                         }
@@ -188,7 +188,7 @@
                         orientation: 'portrait',
                         pageSize: 'LEGAL',
                         title: document.title,
-                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now()->locale('es_PE')->isoFormat('LLLL')}}",
+                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                         footer: true,
                         customize: function ( doc ) {
                             console.log( doc.content );
@@ -229,7 +229,7 @@
                             columns: [1,3,4,6,7]
                         },
                         footer: true,
-                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now()->locale('es_PE')->isoFormat('LLLL')}}",
+                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                     }
                 ]
             },

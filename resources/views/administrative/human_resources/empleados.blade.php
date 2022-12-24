@@ -96,7 +96,7 @@
                             <div class="form-group row">
                                 <label for="fechaNacEmpleado" class="col-sm-5 col-form-label">Fecha de nacimiento (opcional)</label>
                                 <div class="col-sm-7">
-                                    <input id="fechaNacEmpleado" type="date" class="form-control" max="{{Carbon\Carbon::now()->subYears(18)->format('Y-m-d')}}" placeholder="Mes/Día/Año">
+                                    <input id="fechaNacEmpleado" type="date" class="form-control" max="{{Carbon\Carbon::now('-05:00')->subYears(18)->format('Y-m-d')}}" placeholder="Mes/Día/Año">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -236,7 +236,7 @@
                             columns: [0,1,3,4,7]
                         },
                         title: document.title,
-                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now()->locale('es_PE')->isoFormat('LLLL')}}",
+                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                         excelStyles: {
                             template: 'blue_medium',
                         }
@@ -252,7 +252,7 @@
                         orientation: 'portrait',
                         // pageSize: 'LEGAL',
                         title: document.title,
-                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now()->locale('es_PE')->isoFormat('LLLL')}}",
+                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                         footer: true,
                         customize: function ( doc ) {
                             console.log( doc.content );
@@ -292,7 +292,7 @@
                         exportOptions: {
                             columns: [0,1,3,4,7]
                         },
-                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now()->locale('es_PE')->isoFormat('LLLL')}}",
+                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                     }
                 ]
             }

@@ -143,7 +143,7 @@
                             columns: [0,1,2,3]
                         },
                         title: document.title,
-                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now()->locale('es_PE')->isoFormat('LLLL')}}",
+                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                         excelStyles: {
                             template: 'blue_medium',
                         }
@@ -159,7 +159,7 @@
                         orientation: 'portrait',
                         // pageSize: 'LEGAL',
                         title: document.title,
-                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now()->locale('es_PE')->isoFormat('LLLL')}}",
+                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                         footer: true,
                         customize: function ( doc ) {
                             console.log( doc.content );
@@ -199,7 +199,7 @@
                         exportOptions: {
                             columns: [0,1,2,3]
                         },
-                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now()->locale('es_PE')->isoFormat('LLLL')}}",
+                        messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                     }
                 ]
             }
