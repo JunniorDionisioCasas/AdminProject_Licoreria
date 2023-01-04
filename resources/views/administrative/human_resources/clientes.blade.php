@@ -20,6 +20,7 @@
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
+                            <th scope="col">DNI</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellidos</th>
                             <th scope="col">Email</th>
@@ -62,6 +63,12 @@
                                 <label for="apellidoCliente" class="col-sm-5 col-form-label">Apellido*</label>
                                 <div class="col-sm-7">
                                     <input id="apellidoCliente" type="text" class="form-control" placeholder="Ingrese el apellido del cliente" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="numDocCliente" class="col-sm-5 col-form-label">Número de documento*</label>
+                                <div class="col-sm-7">
+                                    <input id="numDocCliente" type="text" class="form-control" placeholder="Ingrese el DNI del cliente" required pattern="[0-9]{8,11}">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -155,7 +162,11 @@
             },
             rowId: 'id',
             "columns":[
-                {"data":"id"},
+                {
+                    "data":"id",
+                    visible: false
+                },
+                {"data":"usr_num_documento"},
                 {
                     "data":"name",
                     render: function (data, type, row) {
@@ -217,7 +228,7 @@
                         titleAttr:'Formato Excel',
                         className: 'excelButton',
                         exportOptions: {
-                            columns: [0,1,3,6]
+                            columns: [1,2,4,7]
                         },
                         title: document.title,
                         messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
@@ -231,7 +242,7 @@
                         titleAttr:'Formato PDF',
                         className: 'pdfButton',
                         exportOptions: {
-                            columns: [0,1,3,6]
+                            columns: [1,2,4,7]
                         },
                         orientation: 'portrait',
                         // pageSize: 'LEGAL',
@@ -274,7 +285,7 @@
                         titleAttr:'Imprimir',
                         className: 'printButton',
                         exportOptions: {
-                            columns: [0,1,3,6]
+                            columns: [1,2,4,7]
                         },
                         messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                     }
@@ -288,7 +299,7 @@
         let selectProvincia = document.getElementById("selectProvincia");
         let selectDistrito = document.getElementById("selectDistrito");
         let imagen = document.getElementById("imagenCliente");
-        let opcion, fila, id, nombre, apellido, cargo, correo, direccion, imgPath, fechaNac, idProvincia, idDistrito;
+        let opcion, fila, id, nombre, apellido, cargo, correo, direccion, imgPath, fechaNac, idProvincia, idDistrito, numDocumento;
         
         function listar_provincias() {
             const url = urlDominio+'api/provincias';
@@ -400,9 +411,10 @@
 
             removeOptions(selectDistrito);
 
-            id = fila.find('td:eq(0)').text();
+            id = dataTableClientes.row(fila).data()['id'];
             nombre = dataTableClientes.row(fila).data()['name'];
             apellido = dataTableClientes.row(fila).data()['usr_apellidos'];
+            numDocumento = dataTableClientes.row(fila).data()['usr_num_documento'];
             correo = fila.find('td:eq(2)').text();
             idProvincia = dataTableClientes.row(fila).data()['id_provincia'];
             idDistrito = dataTableClientes.row(fila).data()['id_distrito'];
@@ -420,6 +432,7 @@
             $("#idCliente").val(id);
             $("#nombreCliente").val(nombre);
             $("#apellidoCliente").val(apellido);
+            $("#numDocCliente").val(numDocumento);
             $("#emailCliente").val(correo);
             $("#fechaNacCliente").val(fechaNac);
 
@@ -494,6 +507,7 @@
             id = $('#idCliente').val();
             nombre = $('#nombreCliente').val();
             apellido = $('#apellidoCliente').val();
+            numDocumento = $("#numDocCliente").val();
             correo = $('#emailCliente').val();
             password = $('#passwordCliente').val();
             passwordConfirm = $('#passwordConfCliente').val();
@@ -534,6 +548,7 @@
 
             formData.append('name', nombre);
             formData.append('usr_apellidos', apellido);
+            formData.append('usr_num_documento', numDocumento);
             formData.append('email', correo);
             formData.append('id_provincia', idProvincia);
             formData.append('id_distrito', idDistrito);

@@ -20,6 +20,7 @@
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
+                            <th scope="col">DNI</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Apellidos</th>
                             <th scope="col">Cargo</th>
@@ -63,6 +64,12 @@
                                 <label for="apellidoEmpleado" class="col-sm-5 col-form-label">Apellido*</label>
                                 <div class="col-sm-7">
                                     <input id="apellidoEmpleado" type="text" class="form-control" placeholder="Ingrese el apellido del empleado" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="numDocEmpleado" class="col-sm-5 col-form-label">Número de documento*</label>
+                                <div class="col-sm-7">
+                                    <input id="numDocEmpleado" type="text" class="form-control" placeholder="Ingrese el DNI del empleado" required pattern="[0-9]{8,11}">
                                 </div>
                             </div>
                             <div class="form-row">
@@ -161,7 +168,11 @@
             },
             rowId: 'id',
             "columns":[
-                {"data":"id"},
+                {
+                    "data":"id",
+                    visible: false
+                },
+                {"data":"usr_num_documento"},
                 {
                     "data":"name",
                     render: function (data, type, row) {
@@ -233,7 +244,7 @@
                         titleAttr:'Formato Excel',
                         className: 'excelButton',
                         exportOptions: {
-                            columns: [0,1,3,4,7]
+                            columns: [1,2,4,5,8]
                         },
                         title: document.title,
                         messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
@@ -247,7 +258,7 @@
                         titleAttr:'Formato PDF',
                         className: 'pdfButton',
                         exportOptions: {
-                            columns: [0,1,3,4,7]
+                            columns: [1,2,4,5,8]
                         },
                         orientation: 'portrait',
                         // pageSize: 'LEGAL',
@@ -290,7 +301,7 @@
                         titleAttr:'Imprimir',
                         className: 'printButton',
                         exportOptions: {
-                            columns: [0,1,3,4,7]
+                            columns: [1,2,4,5,8]
                         },
                         messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                     }
@@ -305,7 +316,7 @@
         let selectProvincia = document.getElementById("selectProvincia");
         let selectDistrito = document.getElementById("selectDistrito");
         let imagen = document.getElementById("imagenEmpleado");
-        let opcion, fila, id, nombre, apellido, cargo, correo, direccion, imgPath, fechaNac, idProvincia, idDistrito;
+        let opcion, fila, id, nombre, apellido, cargo, correo, direccion, imgPath, fechaNac, idProvincia, idDistrito, numDocumento;
 
         function listar_cargos() {
             const url = urlDominio+'api/cargos';
@@ -439,9 +450,10 @@
 
             removeOptions(selectDistrito);
 
-            id = fila.find('td:eq(0)').text();
+            id = dataTableEmpleados.row(fila).data()['id'];
             nombre = dataTableEmpleados.row(fila).data()['name'];
             apellido = dataTableEmpleados.row(fila).data()['usr_apellidos'];
+            numDocumento = dataTableEmpleados.row(fila).data()['usr_num_documento'];
             cargo = fila.find('td:eq(2)').text();
             correo = fila.find('td:eq(3)').text();
             idProvincia = dataTableEmpleados.row(fila).data()['id_provincia'];
@@ -460,6 +472,7 @@
             $("#idEmpleado").val(id);
             $("#nombreEmpleado").val(nombre);
             $("#apellidoEmpleado").val(apellido);
+            $("#numDocEmpleado").val(numDocumento);
             $("#emailEmpleado").val(correo);
             $("#fechaNacEmpleado").val(fechaNac);
 
@@ -538,6 +551,7 @@
             id = $('#idEmpleado').val();
             nombre = $('#nombreEmpleado').val();
             apellido = $('#apellidoEmpleado').val();
+            numDocumento = $("#numDocEmpleado").val();
             cargo = $('#cargoEmpleado').val();
             correo = $('#emailEmpleado').val();
             password = $('#passwordEmpleado').val();
@@ -560,6 +574,7 @@
 
             formData.append('name', nombre);
             formData.append('usr_apellidos', apellido);
+            formData.append('usr_num_documento', numDocumento);
             formData.append('id_cargo', cargo);
             formData.append('email', correo);
             formData.append('id_provincia', idProvincia);
