@@ -28,6 +28,7 @@
                             <th scope="col">Fecha</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Estado code</th>
+                            <th scope="col">Comprobante URL</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
@@ -39,7 +40,7 @@
         </div>
     </div>
 
-    <div id="modalReceipt" class="modal" aria-labelledby="Comprobante de pedido" tabindex="-1">
+    <!-- <div id="modalReceipt" class="modal" aria-labelledby="Comprobante de pedido" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -60,7 +61,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 @stop
 
@@ -143,6 +144,10 @@
                     visible: false
                 },
                 {
+                    "data":"cmp_pdf_path",
+                    visible: false
+                },
+                {
                     render: function (data, type, row) {
                         let btnVer = `<button class="btn btn-xs btn-default text-primary mx-1 shadow btnVer" title="Ver">
                                             <i class="fas fa-eye"></i>
@@ -170,6 +175,7 @@
                     "orderable":false
                 }
             ],
+            order: [[6, 'desc']],
             autoWidth: false,
             language: {
                 url: 'vendor/datatables-plugins/internationalisation/es-ES.json'
@@ -258,7 +264,9 @@
         });
 
         $(document).on('click', ".btnVer", function (){
-            $('#modalReceipt').modal('show');
+            compUrl = dataTableProductos.row(fila).data()['cmp_pdf_path'];
+            window.open(compUrl, '_blank').focus();
+            // $('#modalReceipt').modal('show');
         });
 
         $(document).on('click', ".btnPagar", function (){
