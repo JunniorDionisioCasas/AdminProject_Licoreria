@@ -17,6 +17,8 @@ Route::get('/', function () {
     return view('auth/login');
 });
 
+Route::permanentRedirect('/register', '/login');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

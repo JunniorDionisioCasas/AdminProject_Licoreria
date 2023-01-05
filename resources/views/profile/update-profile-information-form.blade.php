@@ -59,6 +59,13 @@
             <x-jet-input-error for="name" class="mt-2" />
         </div>
 
+        <!-- Last Name -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-jet-label for="usr_apellidos" value="{{ __('Last Name') }}" />
+            <x-jet-input id="usr_apellidos" type="text" class="mt-1 block w-full" wire:model.defer="state.usr_apellidos" autocomplete="usr_apellidos" />
+            <x-jet-input-error for="usr_apellidos" class="mt-2" />
+        </div>
+
         <!-- Email -->
         <div class="col-span-6 sm:col-span-4">
             <x-jet-label for="email" value="{{ __('Email') }}" />
@@ -80,6 +87,20 @@
                     </p>
                 @endif
             @endif
+        </div>
+        
+        <!-- Numero de documento de identidad -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-jet-label for="usr_num_documento" value="{{ __('DNI') }}" />
+            <x-jet-input id="usr_num_documento" type="text" class="mt-1 block w-full" wire:model.defer="state.usr_num_documento" autocomplete="usr_num_documento" pattern="[0-9]{8}"/>
+            <x-jet-input-error for="usr_num_documento" class="mt-2" />
+        </div>
+        
+        <!-- Fecha de nacimiento -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-jet-label for="usr_fecha_nacimiento" value="{{ __('Date Birth') }}" />
+            <x-jet-input id="usr_fecha_nacimiento" type="date" class="mt-1 block w-full" wire:model.defer="state.usr_fecha_nacimiento" autocomplete="usr_fecha_nacimiento" max="{{Carbon\Carbon::now('-05:00')->subYears(18)->format('Y-m-d')}}"/>
+            <x-jet-input-error for="usr_fecha_nacimiento" class="mt-2" />
         </div>
     </x-slot>
 
