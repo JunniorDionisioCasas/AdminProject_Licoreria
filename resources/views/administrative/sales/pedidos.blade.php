@@ -264,6 +264,7 @@
         });
 
         $(document).on('click', ".btnVer", function (){
+            fila = $(this).closest('tr');
             compUrl = dataTableProductos.row(fila).data()['cmp_pdf_path'];
             window.open(compUrl, '_blank').focus();
             // $('#modalReceipt').modal('show');
