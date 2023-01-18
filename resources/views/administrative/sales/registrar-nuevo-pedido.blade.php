@@ -131,17 +131,24 @@
                         <tfoot>
                             <tr>
                                 <td></td>
-                                <td class="text-right" colspan="5" id="txt_prc_total">
+                                <td class="text-right" colspan="4">
+                                    <b>TOTAL:</b>
+                                </td>
+                                <td id="txt_prc_total" class="text-right">
                                     <b>S/ 0.00</b>
                                 </td>
+                                <td></td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
+
+            <div class="tdFooterTotal">
+                <button id="btnRealizarVenta" type="button" class="btn btn-danger">Realizar venta</button>
+            </div>
         </div>
     </div>
-
 @stop
 
 @section('css')
@@ -192,9 +199,11 @@
                     "orderable":false
                 },
                 {
-                    "defaultContent":`<button class="btn btn-default mx-1 shadow btnAdd" title="Añadir">
-                                        <i class="fas fa-cart-plus"></i>
-                                    </button>`,
+                    "render": function ( data, type, row, meta ) {
+                        return `<button id="btnAdd-${row['id_producto']}" class="btn btn-default mx-1 shadow btnAdd" title="Añadir">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>`;
+                    },
                     "orderable":false
                 }
             ],
@@ -268,20 +277,24 @@
                 "<'row'<'col-lg-12 col-xl-auto'i><'col-lg-12 col-xl-auto'p>>",
         });
 
-        let listCartTable = document.getElementById("lista_cliente_carrito");
+        let cartTable = document.getElementById("tabla_cliente_carrito");
+        let listCartTableBody = document.getElementById("lista_cliente_carrito");
         let btnRedirectPrd = document.getElementById("btnAdministrarPrd");
         let btnRedirectClt = document.getElementById("btnAdministrarClt");
-        let fila, idClt, nombreApllClt, emailClt, idPrd, nombrePrd, precioPrd, stockPrd, imgPathPrd;
+        let btnRealizarVenta = document.getElementById("btnRealizarVenta");
+        let idClt, nombreApllClt, emailClt, idPrd, nombrePrd, precioPrd, stockPrd, imgPathPrd;
         let disabledIfMaxStock = '';
         let carrito = [];
+        let prc_total = 0;
 
         $('#divSelectedClient').hide();
         btnRedirectPrd.addEventListener("click", function(){ location.href = '/productos' });
         btnRedirectClt.addEventListener("click", function(){ location.href = '/clientes' });
+        btnRealizarVenta.addEventListener("click", function(){ registro_venta() });
 
         // select client
         $(document).on('click', '.btnSelect', function (){
-            fila = $(this).closest('tr');
+            let fila = $(this).closest('tr');
 
             idClt = dataTableClientes.row(fila).data()['id'];
             nombreApllClt = fila.find('td:eq(0)').text();
@@ -302,36 +315,38 @@
 
         // add product to cart
         $(document).on('click', '.btnAdd', function (){
-            fila = $(this).closest('tr');
+            let fila = $(this).closest('tr');
 
             idPrd = dataTableProductos.row(fila).data()['id_producto'];
             imgPathPrd = dataTableProductos.row(fila).data()['prd_imagen_path'];
             nombrePrd = fila.find('td:eq(1)').text();
             precioPrd = dataTableProductos.row(fila).data()['prd_precio'];
+            stockPrd = dataTableProductos.row(fila).data()['prd_stock'];
+            disabledIfMaxStock = (stockPrd == 1) ? disabled : '';
 
             console.log("id prod: "+idPrd);
 
-            if(addProduct(idPrd)) {
-                listCartTable.insertAdjacentHTML('beforeend', 
+            if(addProduct(idPrd, precioPrd, nombrePrd)) {
+                listCartTableBody.insertAdjacentHTML('beforeend', 
                     `<tr>
                         <td>${idPrd}</td>
                         <td>
-                            <img src="${imgPathPrd}" alt="${nombrePrd}" width="50" height="50">
+                            <img src="${imgPathPrd}" alt="${nombrePrd}" width="auto" height="50">
                         </td>
                         <td>${nombrePrd}</td>
                         <td class="text-center">S/ ${precioPrd}</td>
                         <td class="text-center">
-                            <button id="btn_decrs_${idPrd}" class="btn btn-xs btn-default shadow btnIncrAmnt" type="button" title="Menos" onclick="decr_cant(event, ${idPrd}, ${parseFloat(precioPrd).toFixed(2)})">
+                            <button id="btn_decrs_${idPrd}" class="btn btn-xs btn-default shadow btnDcrsAmnt" type="button" title="Menos" onclick="decr_cant(${idPrd}, ${parseFloat(precioPrd).toFixed(2)})" disabled>
                                 <i class="fa fa-minus fa-sm"></i>
                             </button>
                             <span id="txt_cntd_${idPrd}">1</span>
-                            <button id="btn_incrs_${idPrd}" class="btn btn-xs btn-default shadow btnDcrsAmnt" type="button" title="Más" onclick="incr_cant(event, ${idPrd}, ${parseFloat(precioPrd).toFixed(2)})" ${disabledIfMaxStock}>
+                            <button id="btn_incrs_${idPrd}" class="btn btn-xs btn-default shadow btnIncrAmnt" type="button" title="Más" onclick="incr_cant(${idPrd}, ${parseFloat(precioPrd).toFixed(2)}, ${stockPrd})" ${disabledIfMaxStock}>
                                 <i class="fa fa-plus fa-sm"></i>
                             </button>
                         </td>
                         <td class="text-center" id="multiplied_prc_${idPrd}">S/ ${parseFloat(precioPrd).toFixed(2)}</td>
                         <td>
-                            <button type="button" class="btn btn-xs  btn-default btnDltPrd" onclick="quitarProd(${idPrd})">
+                            <button type="button" class="btn btn-xs  btn-default btnDltPrd" onclick="quitarProd(event, ${idPrd})">
                                 <i class="fa fa-times"></i>
                             </button>
                         </td>
@@ -339,35 +354,56 @@
 
                 $('#msg-empty-cart').hide();
             } else {
-                let qnt = $('#txt_cntd_'+idPrd).text();
-                $('#txt_cntd_'+idPrd).text(parseInt(qnt)+1);
+                const qnt = $('#txt_cntd_'+idPrd).text();
+                const newCant = parseInt(qnt);
+
+                if(newCant == stockPrd) {
+                    $(this).prop('disabled', true);
+                    $('#btn_incrs_'+idPrd).prop('disabled', true);
+                }
             }
         });
 
-        let addProduct = (id) => {
+        let calculation = () => {
+            prc_total = 0;
+            //obteniendo total
+            carrito.forEach(p => {
+                prc_total += p.cntd * p.precio;
+            });
+
+            prc_total = parseFloat(prc_total.toFixed(2));
+            update_total_prices();
+        };
+
+        let addProduct = (id, prc, nmbr) => {
             let search = carrito.find( (x) => x.id === id );
             if(search === undefined){
                 carrito.push({
                     id: id,
-                    cntd: 1
+                    cntd: 1,
+                    nmbr: nmbr,
+                    precio: prc
                 });
 
+                calculation();
                 console.log(carrito);
                 return true;
             }else{
-                search.cntd++;
-
+                document.getElementById("btn_decrs_"+id).disabled = false;
+                document.getElementById("btn_incrs_"+id).click();
+                
+                // search.cntd++;
                 console.log(carrito);
+
                 return false;
             }
-            // calculation();
         };
 
         let increment = (id) => {
             let search = carrito.find( (x) => x.id === id );
             search.cntd += 1;
             console.log(carrito);
-            // calculation();
+            calculation();
         };
 
         let decrement = (id) => {
@@ -378,14 +414,14 @@
                 search.cntd -= 1;
             
             console.log(carrito);
-            // calculation();
+            calculation();
         };
 
         let remove = (id) => {
             console.log(id);
             carrito = carrito.filter( (x) => x.id !== id);
 
-            // calculation();
+            calculation();
         };
 
         let update_total_prices = () => {
@@ -397,45 +433,115 @@
             document.getElementById("multiplied_prc_"+id).innerHTML = "S/ " + (prc * cntd).toFixed(2);
         };
 
-        let incr_cant = (e, id, prc) => {
-            e = e || window.event;
-            let target = e.target || e.srcElement;
+        let incr_cant = (id, prc, stock) => {
             let elmt_cntd = document.getElementById("txt_cntd_"+id);
             let cntd = parseInt(elmt_cntd.innerHTML);
-            let fila = $(e.target).get(0);
-            let stock = dataTableProductos.row(fila).data()['id_producto'];
             
-            if(cntd == 1){
-                document.getElementById("btn_decrs_"+id).disabled = false;
-            }
+            if(cntd == 1) document.getElementById("btn_decrs_"+id).disabled = false;
 
             cntd = cntd + 1;
             elmt_cntd.innerHTML = cntd;
 
+            if(cntd == stock) document.getElementById("btn_incrs_"+id).disabled = true;
+
             calcular_precio_x_prd(id, prc, cntd);
             increment(id);
-            update_total_prices();
         }
 
-        let decr_cant = (e, id, prc) => {
-            e = e || window.event;
-            let target = e.target || e.srcElement;
+        let decr_cant = (id, prc) => {
             let elmt_cntd = document.getElementById("txt_cntd_"+id);
             let cntd = parseInt(elmt_cntd.innerHTML);
             
-            if(cntd >= 2){
-                cntd = cntd - 1;
-                elmt_cntd.innerHTML = cntd;
+            document.getElementById("btn_incrs_"+id).disabled = false;
 
-                if(cntd == 1){
-                    document.getElementById("btn_decrs_"+id).disabled = true;
-                }
-            }
+            cntd = cntd - 1;
+            elmt_cntd.innerHTML = cntd;
+
+            if(cntd == 1) document.getElementById("btn_decrs_"+id).disabled = true;
 
             calcular_precio_x_prd(id, prc, cntd);
             decrement(id);
-            update_total_prices();
         }
+
+        let quitarProd = (e, id) => {
+            e = e || window.event;
+            const target = e.target || e.srcElement;
+            // let fila = $(this).closest('tr');
+            const row_elmt = target.parentElement.parentElement;
+            row_elmt.closest("tr").remove();
+            
+            document.getElementById("btnAdd-"+id).disabled = false;
+
+            remove(id);
+
+            if( cartTable.tBodies[0].rows.length == 1){
+                $('#msg-empty-cart').show();
+            }
+        }
+
+        let registro_venta = () => {
+            if(carrito.length == 0){
+                Swal.fire('Seleccione productos', 'No ha seleccionado al menos un producto que vender.', 'error');
+            } else if(idClt == null || emailClt == null) {
+                Swal.fire('Seleccione un cliente', 'No ha seleccionado un cliente al que vender.', 'error');
+            } else {
+                const pdd_descripcion = null;
+
+                const pedido_data = {
+                    id_tipo_pedido: 2,  //2 = Presencial
+                    tipo_comp: "Boleto",
+                    id_user: idClt,
+                    total: prc_total,
+                    pdd_fecha_entrega: "{{Carbon\Carbon::now('-05:00')}}",
+                    pdd_descripcion: pdd_descripcion,
+                    pdd_estado: 3, //3=pagado y entregado, al ser presencial
+                    productos: carrito,
+                    userMail: emailClt,
+                    id_empleado: {{\Auth::user()->id}}
+                };
+                
+                let loadingSwal = Swal.fire({
+                    title: 'Registrando venta',
+                    confirmButtonText: 'Look up',
+                    allowOutsideClick: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    },
+                    })
+
+                //api pedido, store
+                const url = urlDominio+'api/pedido';
+
+                fetch( url, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(pedido_data)
+                } )
+                .then( response => response.json() )
+                .then( success => {
+                    console.log(success);
+                    loadingSwal.close();
+                    Swal.fire({
+                        title: 'Venta realizda',
+                        type: 'success',
+                    }).then( (result) => {
+                        console.log(result);
+                        /* if (result.value == true) {
+                            location.href = '/pedidos';
+                        }else{
+                            console.log('cancelado');
+                        } */
+                        location.href = '/pedidos';
+                    })
+                } )
+                .catch( error => {
+                    console.log(error);
+                    Swal.fire('Error de servidor', 'Hubo un fallo al momento de registrar, por favor intente más tarde.', 'error');
+                } );
+            }
+        };
 
     </script>
 @stop

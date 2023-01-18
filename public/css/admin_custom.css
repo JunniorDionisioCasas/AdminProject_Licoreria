@@ -82,3 +82,10 @@ div.col-lg-12.col-xl-6 #tabla_clientes_filter label input {
 .pdfButton{
     background-color: #F40F02;
 }
+
+#btnRealizarVenta {
+    height: 50px;
+    font-size: larger;
+    padding: 0px 20px;
+    margin-bottom: 20px;
+}
