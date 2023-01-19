@@ -3,25 +3,19 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <h1>Bienvenido(a) {{\Auth::user()->name}}</h1>
 @stop
 
 @section('content')
-    <p>Bienvenido {{\Auth::user()->name}}</p>
-    @php
-        echo(Carbon\Carbon::now('-05:00')->isoFormat('d'));
-        $weekDays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-        $today = Carbon\Carbon::now('-05:00')->isoFormat('d');
-        $barChartsLabels = [];
-        for($i=0; $i<7; $i++){
-            $weekIndex = $today + $i + 1;
-            if($weekIndex>6) $weekIndex = $weekIndex - 7;
-            $barChartsLabels[$i] = $weekDays[$weekIndex];
-        }
-        print_r($barChartsLabels);
-    @endphp
-    <div>
-        <canvas id="myChart" aria-label="Gráfico de ventas" role="img"></canvas>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <canvas id="barChart" aria-label="Gráfico de barras de ventas en la semana" role="img"></canvas>
+            </div>
+            <div class="col">
+                <canvas id="pieChart" aria-label="Gráfico pie de productos más vendidos" role="img"></canvas>
+            </div>
+        </div>
     </div>
 @stop
 
@@ -34,6 +28,8 @@
     <script src="js/urlDomain.js"></script>
     <script>
         const url = urlDominio+'api/admin_home_info';
+        const options = { style: 'currency', currency: 'PEN' };
+        const numberFormat = new Intl.NumberFormat('es-PE', options);
 
         //llamado al api provincias, index
         fetch(url, {
@@ -45,37 +41,60 @@
         .then(res => res.json())
         .then(res => {
             console.log(res);
+            loadCharts(res);
         })
         .catch(error => console.log(error));
 
-        const ctx = document.getElementById('myChart');
-        /* const data = [
-            { year: 2010, count: 10 },
-            { year: 2011, count: 20 },
-            { year: 2012, count: 15 },
-            { year: 2013, count: 25 },
-            { year: 2014, count: 22 },
-            { year: 2015, count: 30 },
-            { year: 2016, count: 28 },
-        ];
+        let loadCharts = (responseObject) => {
+            const barChartData = responseObject.barChartData;
+            const pieData = responseObject.pieData;
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: data.map(row => row.year),
-                datasets: [{
-                    label: 'Acquisitions by year',
-                    data: data.map(row => row.count),
-                    borderWidth: 1
-                }]
-            },
-            options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-            }
-        }); */
+            //bar chart
+            new Chart(document.getElementById('barChart'), {
+                type: 'bar',
+                data: {
+                    labels: barChartData.map(row => (row.nombre_dia+'\n'+row.pdd_fecha)),
+                    datasets: [{
+                        label: 'Monto en ventas por día',
+                        data: barChartData.map(row => row.total_dia),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    aspectRatio: 1,
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: value => numberFormat.format(value)
+                            }
+                        }
+                    }
+                },
+            });
+
+            //pie chart
+            new Chart(document.getElementById('pieChart'), {
+                type: 'pie',
+                data: {
+                    labels: pieData.map(row => row.prd_nombre),
+                    datasets: [{
+                        label: 'Cantidad vendida',
+                        data: pieData.map(row => row.cant_vendidos),
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Productos más vendidos'
+                        }
+                    }
+                },
+            });
+        }
     </script>
 @stop
