@@ -215,6 +215,7 @@
                     }
                 }
             ],
+            pageLength: 3,
             autoWidth: false,
             language: {
                 url: 'vendor/datatables-plugins/internationalisation/es-ES.json'
@@ -268,6 +269,7 @@
                     "orderable":false
                 }
             ],
+            pageLength: 5,
             autoWidth: false,
             language: {
                 url: 'vendor/datatables-plugins/internationalisation/es-ES.json'

@@ -7,14 +7,12 @@
 @stop
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <canvas id="barChart" aria-label="Gráfico de barras de ventas en la semana" role="img"></canvas>
-            </div>
-            <div class="col">
-                <canvas id="pieChart" aria-label="Gráfico pie de productos más vendidos" role="img"></canvas>
-            </div>
+    <div class="row">
+        <div class="col">
+            <canvas id="barChart" aria-label="Gráfico de barras de ventas en la semana" role="img"></canvas>
+        </div>
+        <div class="col">
+            <canvas id="pieChart" aria-label="Gráfico pie de productos más vendidos" role="img"></canvas>
         </div>
     </div>
 @stop
