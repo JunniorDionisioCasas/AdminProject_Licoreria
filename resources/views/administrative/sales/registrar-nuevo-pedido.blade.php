@@ -77,18 +77,18 @@
                     <!-- selected client info -->
                     <div id="divSelectedClient">
                         <div class="row vertical-margin">
-                            <div class="col-md-5 text-right">
+                            <div class="col-5 text-right">
                                 <span>Cliente:</span>
                             </div>
-                            <div class="col-md-7">
+                            <div class="col-7">
                                 <b id="spanCltName"></b>
                             </div>
                         </div>
                         <div class="row vertical-margin">
-                            <div class="col-md-5 text-right">
+                            <div class="col-5 text-right">
                                 <span>Correo:</span>
                             </div>
-                            <div class="col-md-7">
+                            <div class="col-7">
                                 <b id="spanCltEmail"></b>
                             </div>
                         </div>
@@ -147,17 +147,6 @@
             <div class="tdFooterTotal">
                 <button id="btnRealizarVenta" type="button" class="btn btn-danger">Realizar venta</button>
             </div>
-            @php
-                $app_path = app_path();
-                $database_path = database_path();
-                $public_path = public_path();
-                $base_path = base_path();
-                $lang_path = lang_path();
-                $resource_path = resource_path();
-                $config_path = config_path();
-                $storage_path = storage_path();
-                $url = url('/invoices');
-            @endphp
         </div>
     </div>
 @stop
@@ -169,16 +158,6 @@
 @section('js')
     <script src="js/urlDomain.js"></script>
     <script>
-        console.log("{{$app_path}}");
-        console.log("{{$database_path}}");
-        console.log("{{$public_path}}");
-        console.log("{{$base_path}}");
-        console.log("{{$lang_path}}");
-        console.log("{{$resource_path}}");
-        console.log("{{$config_path}}");
-        console.log("{{$storage_path}}");
-        console.log("{{$url}}");
-        console.log("{{realpath($_SERVER["DOCUMENT_ROOT"])}}");
         /* Products table */
         let dataTableProductos = $('#tabla_productos').DataTable({
             "ajax":{
