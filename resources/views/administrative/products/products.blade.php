@@ -456,7 +456,7 @@
         //Borrar
         $(document).on('click', '.btnEliminar', function (){
             fila = $(this).closest('tr');
-            id = parseInt(fila.find('td:eq(0)').text());
+            id = dataTableProductos.row(fila).data()['id_producto'];
 
             Swal.fire({
                 title: 'Confirma eliminar el producto?',

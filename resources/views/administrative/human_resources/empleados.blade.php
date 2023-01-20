@@ -69,7 +69,7 @@
                             <div class="form-group row">
                                 <label for="numDocEmpleado" class="col-sm-5 col-form-label">Número de documento*</label>
                                 <div class="col-sm-7">
-                                    <input id="numDocEmpleado" type="text" class="form-control" placeholder="Ingrese el DNI del empleado" required pattern="[0-9]{8,11}">
+                                    <input id="numDocEmpleado" type="text" class="form-control" placeholder="Ingrese el DNI del empleado" required pattern="[0-9]{8,11}" maxlength="8">
                                 </div>
                             </div>
                             <div class="form-row">
@@ -454,11 +454,11 @@
             nombre = dataTableEmpleados.row(fila).data()['name'];
             apellido = dataTableEmpleados.row(fila).data()['usr_apellidos'];
             numDocumento = dataTableEmpleados.row(fila).data()['usr_num_documento'];
-            cargo = fila.find('td:eq(2)').text();
-            correo = fila.find('td:eq(3)').text();
+            cargo = dataTableEmpleados.row(fila).data()['crg_nombre'];
+            correo = dataTableEmpleados.row(fila).data()['email'];
             idProvincia = dataTableEmpleados.row(fila).data()['id_provincia'];
             idDistrito = dataTableEmpleados.row(fila).data()['id_distrito'];
-            direccion = fila.find('td:eq(4)').text();
+            direccion = dataTableEmpleados.row(fila).data()['drc_direccion'];
             imgPath = dataTableEmpleados.row(fila).data()['profile_photo_path'];
             fechaNac = dataTableEmpleados.row(fila).data()['usr_fecha_nacimiento'];
 
@@ -511,7 +511,7 @@
         //Borrar
         $(document).on('click', '.btnEliminar', function (){
             fila = $(this).closest('tr');
-            id = parseInt(fila.find('td:eq(0)').text());
+            id = dataTableEmpleados.row(fila).data()['id'];
 
             Swal.fire({
                 title: 'Confirma eliminar emplead(a)?',

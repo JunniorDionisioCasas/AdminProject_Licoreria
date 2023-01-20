@@ -67,6 +67,7 @@
                             <th scope="col">Clt apellido</th>
                             <th scope="col">Fecha</th>
                             <th scope="col">Total</th>
+                            <th scope="col">PDF</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
@@ -144,6 +145,10 @@
                     render(v){
                         return 'S/ '+Number(v).toFixed(2)
                     }
+                },
+                {
+                    "data":"cmp_pdf_path",
+                    visible: false
                 },
                 {
                     defaultContent: `<button class="btn btn-xs btn-default text-primary mx-1 shadow btnVer" title="Ver">
@@ -371,6 +376,14 @@
         };
 
         btnActualizar.addEventListener("click", function(){updateTableUrl();});
+
+        //open invoice in new tab
+        $(document).on('click', ".btnVer", function (){
+            fila = $(this).closest('tr');
+            compUrl = dataTableReporteVentas.row(fila).data()['cmp_pdf_path'];
+            window.open(compUrl, '_blank').focus();
+            // $('#modalReceipt').modal('show');
+        });
     </script>
 @stop
 

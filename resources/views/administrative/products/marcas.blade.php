@@ -21,6 +21,7 @@
                             <th scope="col">ID</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Descripción</th>
+                            <th scope="col">Imagen</th>
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
@@ -46,7 +47,7 @@
                         <div class="container-fluid">
                             <input id="idMarca" type="hidden">
                             <div class="form-group row">
-                                <label for="nombreMarca" class="col-sm-3 col-form-label">Nombre</label>
+                                <label for="nombreMarca" class="col-sm-3 col-form-label">Nombre*</label>
                                 <div class="col-sm-9">
                                     <input id="nombreMarca" type="text" class="form-control" placeholder="Ingrese el nombre de la marca" required>
                                 </div>
@@ -56,6 +57,19 @@
                                 <div class="col-sm-9">
                                     <textarea id="descMarca" rows="2" class="form-control" placeholder="Ingrese una descripcion (opcional)"></textarea>
                                 </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Imagen</label>
+                                <div class="input-group col-sm-9">
+                                    <div class="custom-file">
+                                        <input id="imagenMarca" name="imagenMarca" type="file" class="custom-file-input" accept="image/*">
+                                        <label class="custom-file-label" for="imagenMarca" data-browse="Elegir">Seleccionar imagen</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="div-img-center">
+                                <img id="imgPreview" class="avatar-lg img-thumbnail img-preview-brand" alt="brand-image">
+                                <small class="form-text text-muted">173x100 px preferentemente</small>
                             </div>
                         </div>
                     </div>
@@ -89,6 +103,10 @@
                     "data":"mrc_descripcion",
                     "defaultContent":"<i>Sin descripción</i>",
                     "orderable":false
+                },
+                {
+                    "data":"mrc_image_path",
+                    visible:false
                 },
                 {
                     "defaultContent":`<button class="btn btn-xs btn-default text-primary mx-1 shadow btnEditar" title="Editar">
@@ -181,12 +199,14 @@
         });
 
         // CRUD logic
+        let imagen = document.getElementById("imagenMarca");
         let opcion, fila, id, nombre, descripcion;
 
         //Crear
         $('#btnCrear').click(function (){
             opcion = 'crear';
             $("#formMarca").trigger("reset");
+            $("#imgPreview").attr("src", "images/placeholder.png");
             $('.modal-header').css("background-color", "#6c757d");
             $('.modal-title').text("Nueva marca");
             $('#modalCRUD').modal('show');
@@ -197,9 +217,10 @@
             opcion = 'editar';
             fila = $(this).closest('tr');
 
-            id = fila.find('td:eq(0)').text();
-            nombre = fila.find('td:eq(1)').text();
-            descripcion = fila.find('td:eq(2)').text();
+            id = dataTableMarcas.row(fila).data()['id_marca'];
+            nombre = dataTableMarcas.row(fila).data()['mrc_nombre'];
+            descripcion = dataTableMarcas.row(fila).data()['mrc_descripcion'];
+            imgPath = dataTableMarcas.row(fila).data()['mrc_image_path'];
 
             $("#idMarca").val(id);
             $("#nombreMarca").val(nombre);
@@ -207,6 +228,12 @@
                 $("#descMarca").val();
             } else {
                 $("#descMarca").val(descripcion);
+            }
+            if(imgPath){
+                $("#imgPreview").attr("src", imgPath);
+            }
+            else{
+                $("#imgPreview").attr("src", "images/placeholder.png");
             }
 
             $('.modal-header').css("background-color", "#007bff");
@@ -217,7 +244,7 @@
         //Borrar
         $(document).on('click', '.btnEliminar', function (){
             fila = $(this).closest('tr');
-            id = parseInt(fila.find('td:eq(0)').text());
+            id = dataTableMarcas.row(fila).data()['id_marca'];
 
             Swal.fire({
                 title: 'Confirma eliminar la marca?',
@@ -255,6 +282,13 @@
             nombre = $('#nombreMarca').val();
             descripcion = $('#descMarca').val();
 
+            let formData = new FormData();
+            formData.append('mrc_nombre', nombre);
+            formData.append('mrc_descripcion', descripcion);
+            if(imagen.files.length !== 0){
+                formData.append('mrc_imagen', imagen.files[0]);
+            }
+
             if(opcion == 'crear'){
                 //api marca, post
                 let url = urlDominio + 'api/marca';
@@ -263,7 +297,7 @@
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({mrc_nombre: nombre, mrc_descripcion: descripcion})
+                    body: formData,//JSON.stringify({mrc_nombre: nombre, mrc_descripcion: descripcion})
                 })
                     .then(res => res.json())
                     .then(success => {
@@ -285,11 +319,11 @@
                 //api marca (update)
                 let url = urlDominio + 'api/marca/'+id;
                 fetch(url, {
-                    method: 'PUT',
+                    method: 'POST',
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({mrc_nombre: nombre, mrc_descripcion: descripcion})
+                    body: formData,
                 })
                     .then(res => res.json())
                     .then(success => {
@@ -307,6 +341,19 @@
                         $('#modalCRUD').modal('hide');
                     })
                     .catch(error => console.log(error));
+            }
+        });
+
+        $('#imagenMarca').on('change',function(e){
+            //if image selected
+            if(imagen.files[0]){
+                let reader = new FileReader();
+                let fileName = imagen.files[0].name;
+                $(this).next('.custom-file-label').addClass("selected").html(fileName);
+                reader.onload = function(e) {
+                    document.getElementById("imgPreview").src = e.target.result;
+                };
+                reader.readAsDataURL(this.files[0]);
             }
         });
     </script>

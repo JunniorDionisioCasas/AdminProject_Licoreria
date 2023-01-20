@@ -45,9 +45,10 @@
 }
 
 /*preview de imagen seleccionada*/
-.img-preview {
-    width:200px;
-    height:200px
+.img-preview-brand {
+    width: auto;
+    min-width: 173px;
+    height:100px
 }
 
 /*columna y header de id oculta*/

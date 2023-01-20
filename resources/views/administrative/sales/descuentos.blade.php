@@ -386,14 +386,14 @@
             opcion = 'editar';
             fila = $(this).closest('tr');
 
-            id = fila.find('td:eq(0)').text();
-            nombre = fila.find('td:eq(1)').text();
-            cantidad = fila.find('td:eq(2)').text();
+            id = dataTableDescuentos.row(fila).data()['id_descuento'];
+            nombre = dataTableDescuentos.row(fila).data()['dsc_nombre'];
+            cantidad = dataTableDescuentos.row(fila).data()['dsc_cantidad'];
             cantidad = parseInt(cantidad.substring(0,cantidad.length-1));
-            tipo = fila.find('td:eq(3)').text();
+            tipo = dataTableDescuentos.row(fila).data()['tds_nombre'];
             detalle = fila.find('td:eq(4)').text();
             detalle = detalle.split(": ")[1];
-            estadoText = fila.find('td:eq(5)').text();
+            estadoText = dataTableDescuentos.row(fila).data()['dsc_estado'];
 
             $("#idDescuento").val(id);
             $("#nombreDescuento").val(nombre);
@@ -431,7 +431,7 @@
         //Borrar
         $(document).on('click', '.btnEliminar', function (){
             fila = $(this).closest('tr');
-            id = parseInt(fila.find('td:eq(0)').text());
+            id = dataTableDescuentos.row(fila).data()['id_descuento'];
 
             Swal.fire({
                 title: 'Confirma eliminar el descuento?',

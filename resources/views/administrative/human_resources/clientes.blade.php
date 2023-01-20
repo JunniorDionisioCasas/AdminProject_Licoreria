@@ -68,7 +68,7 @@
                             <div class="form-group row">
                                 <label for="numDocCliente" class="col-sm-5 col-form-label">Número de documento*</label>
                                 <div class="col-sm-7">
-                                    <input id="numDocCliente" type="text" class="form-control" placeholder="Ingrese el DNI del cliente" required pattern="[0-9]{8,11}">
+                                    <input id="numDocCliente" type="text" class="form-control" placeholder="Ingrese el DNI del cliente" required pattern="[0-9]{8,11}" maxlength="8">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -415,10 +415,10 @@
             nombre = dataTableClientes.row(fila).data()['name'];
             apellido = dataTableClientes.row(fila).data()['usr_apellidos'];
             numDocumento = dataTableClientes.row(fila).data()['usr_num_documento'];
-            correo = fila.find('td:eq(2)').text();
+            correo = dataTableClientes.row(fila).data()['email'];
             idProvincia = dataTableClientes.row(fila).data()['id_provincia'];
             idDistrito = dataTableClientes.row(fila).data()['id_distrito'];
-            direccion = fila.find('td:eq(3)').text();
+            direccion = dataTableClientes.row(fila).data()['drc_direccion'];
             imgPath = dataTableClientes.row(fila).data()['profile_photo_path'];
             fechaNac = dataTableClientes.row(fila).data()['usr_fecha_nacimiento'];
 
@@ -466,7 +466,7 @@
         //Borrar
         $(document).on('click', '.btnEliminar', function (){
             fila = $(this).closest('tr');
-            id = parseInt(fila.find('td:eq(0)').text());
+            id = dataTableClientes.row(fila).data()['id'];
 
             Swal.fire({
                 title: 'Confirma eliminar cliente?',

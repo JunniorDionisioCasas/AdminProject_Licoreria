@@ -235,10 +235,10 @@
             opcion = 'editar';
             fila = $(this).closest('tr');
 
-            id = fila.find('td:eq(0)').text();
-            nombre = fila.find('td:eq(1)').text();
-            anotaciones = fila.find('td:eq(2)').text();
-            estadoText = fila.find('td:eq(3)').text();
+            id = dataTableProveedores.row(fila).data()['id_proveedor'];
+            nombre = dataTableProveedores.row(fila).data()['prv_nombre'];
+            anotaciones = dataTableProveedores.row(fila).data()['prv_anotaciones'];
+            estadoText = dataTableProveedores.row(fila).data()['prv_estado'];
 
             $("#idProveedor").val(id);
             $("#nombreProveedor").val(nombre);
@@ -264,7 +264,7 @@
         //Borrar
         $(document).on('click', '.btnEliminar', function (){
             fila = $(this).closest('tr');
-            id = parseInt(fila.find('td:eq(0)').text());
+            id = dataTableProveedores.row(fila).data()['id_proveedor'];
 
             Swal.fire({
                 title: 'Confirma eliminar el proveedor?',

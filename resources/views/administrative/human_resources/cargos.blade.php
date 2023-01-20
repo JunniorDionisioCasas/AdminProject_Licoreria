@@ -236,10 +236,10 @@
             opcion = 'editar';
             fila = $(this).closest('tr');
 
-            id = fila.find('td:eq(0)').text();
-            nombre = fila.find('td:eq(1)').text();
-            estadoText = fila.find('td:eq(2)').text();
-            descripcion = fila.find('td:eq(3)').text();
+            id = dataTableCargos.row(fila).data()['id_cargo'];
+            nombre = dataTableCargos.row(fila).data()['crg_nombre'];
+            estadoText = dataTableCargos.row(fila).data()['crg_acceso_admin'];
+            descripcion = dataTableCargos.row(fila).data()['crg_descripcion'];
 
             $("#idCargo").val(id);
             $("#nombreCargo").val(nombre);
@@ -248,7 +248,7 @@
             } else {
                 $("#descCargo").val(descripcion);
             }
-            if ( estadoText == "Con acceso" ) {
+            if ( estadoText == 1 || estadoText == "Con acceso" ) {
                 switchAccsSist.checked = true;
                 labelAccsSist.innerHTML = badgeElmntSwitchAccs;
             } else {
@@ -271,7 +271,7 @@
         //Borrar
         $(document).on('click', '.btnEliminar', function (){
             fila = $(this).closest('tr');
-            id = parseInt(fila.find('td:eq(0)').text());
+            id = dataTableCargos.row(fila).data()['id_cargo'];
 
             Swal.fire({
                 title: 'Confirma eliminar el cargo?',

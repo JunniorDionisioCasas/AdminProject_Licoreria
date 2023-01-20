@@ -198,9 +198,9 @@
             opcion = 'editar';
             fila = $(this).closest('tr');
 
-            id = parseInt(fila.find('td:eq(0)').text());
-            nombre = fila.find('td:eq(1)').text();
-            descripcion = fila.find('td:eq(2)').text();
+            id = dataTableCategorias.row(fila).data()['id_categoria'];
+            nombre = dataTableCategorias.row(fila).data()['ctg_nombre'];
+            descripcion = dataTableCategorias.row(fila).data()['ctg_descripcion'];
 
             $("#idCatg").val(id);
             $("#nombreCatg").val(nombre);
@@ -218,7 +218,7 @@
         //Borrar
         $(document).on('click', '.btnEliminar', function (){
             fila = $(this).closest('tr');
-            id = parseInt(fila.find('td:eq(0)').text());
+            id = dataTableCategorias.row(fila).data()['id_categoria'];
 
             Swal.fire({
                 title: 'Confirma eliminar la categoria?',
