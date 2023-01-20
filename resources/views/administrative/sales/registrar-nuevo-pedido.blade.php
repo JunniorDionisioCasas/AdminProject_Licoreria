@@ -156,6 +156,7 @@
                 $resource_path = resource_path();
                 $config_path = config_path();
                 $storage_path = storage_path();
+                $url = url('/invoices');
             @endphp
         </div>
     </div>
@@ -176,6 +177,7 @@
         console.log("{{$resource_path}}");
         console.log("{{$config_path}}");
         console.log("{{$storage_path}}");
+        console.log("{{$url}}");
         /* Products table */
         let dataTableProductos = $('#tabla_productos').DataTable({
             "ajax":{
