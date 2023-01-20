@@ -231,7 +231,7 @@
                         messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                         footer: true,
                         customize: function ( doc ) {
-                            console.log( doc.content );
+                            // console.log( doc.content );
                             /* doc['header'] = (function (page, pages) {
                                 return {
                                     table: {
@@ -327,9 +327,9 @@
                     "Content-Type": "application/json",
                 }
             })
-                .then(res => res.json(), console.log('Cargando API categorias'))
+                .then(res => res.json())
                 .then(res => {
-                    console.log(res);
+                    // console.log(res);
                     res.forEach(categoria => {
                         // select_categorias.append($("<option />").val(categoria.id_categoria).text(categoria.ctg_nombre));
 
@@ -354,9 +354,9 @@
                     "Content-Type": "application/json",
                 }
             })
-            .then(res => res.json(), console.log('Cargando API marcas'))
+            .then(res => res.json())
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 res.forEach(marca => {
                     let option_elem = document.createElement('option');
                     option_elem.value = marca.id_marca;
@@ -379,9 +379,9 @@
                     "Content-Type": "application/json",
                 }
             })
-            .then(res => res.json(), console.log('Cargando API proveedores'))
+            .then(res => res.json())
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 res.forEach(proveedor => {
                     let option_elem = document.createElement('option');
                     option_elem.value = proveedor.id_proveedor;
@@ -413,16 +413,16 @@
             $("#imagenProd").prop("required", false);
             fila = $(this).closest('tr');
 
-            id = parseInt(fila.find('td:eq(0)').text());
-            nombre = fila.find('td:eq(1)').text();
-            precio = parseFloat(fila.find('td:eq(2)').text().substring(2));
-            stock = parseInt(fila.find('td:eq(3)').text());
-            categoria = fila.find('td:eq(4)').text();
-            marca = fila.find('td:eq(5)').text();
-            proveedor = fila.find('td:eq(6)').text();
-            fechaVenc = fila.find('td:eq(7)').text();
-            descripcion = fila.find('td:eq(8)').text();
-            imgPath = fila.find('td:eq(9)').text();
+            id = dataTableProductos.row(fila).data()['id_producto']; //parseInt(fila.find('td:eq(0)').text());
+            nombre = dataTableProductos.row(fila).data()['prd_nombre'];
+            precio = parseFloat(dataTableProductos.row(fila).data()['prd_precio']); //.substring(2));
+            stock = parseInt(dataTableProductos.row(fila).data()['prd_stock']);
+            categoria = dataTableProductos.row(fila).data()['ctg_nombre'];
+            marca = dataTableProductos.row(fila).data()['mrc_nombre'];
+            proveedor = dataTableProductos.row(fila).data()['prv_nombre'];
+            fechaVenc = dataTableProductos.row(fila).data()['prd_fecha_vencimiento'];
+            descripcion = dataTableProductos.row(fila).data()['prd_descripcion'];
+            imgPath = dataTableProductos.row(fila).data()['prd_imagen_path'];
 
             $("#idProd").val(id);
             $("#nombreProd").val(nombre);
@@ -466,7 +466,7 @@
                 cancelButtonText: 'Cancelar',
                 confirmButtonText: 'Confirmar',
             }).then( (result) => {
-                console.log(result);
+                // console.log(result);
                 if (result.value == true) {
                     //api producto/id, delete
                     let url = urlDominio+'api/producto/'+id;
@@ -477,12 +477,12 @@
                             "Content-Type": "application/json",
                         }
                     })
-                    .then(res => res.json(), console.log('Cargando API delete producto/id'))
+                    .then(res => res.json())
                     .then(success => {
                         // dataTableProductos.row(fila.parents('tr')).remove().draw();
                         dataTableProductos.ajax.reload(null, false);
                         Swal.fire('Producto eliminado', '', 'success');
-                        console.log(success);
+                        // console.log(success);
                     })
                     .catch(error => console.log(error));
                 }else{
@@ -519,9 +519,9 @@
             }
 
             //prueba de obtencio de datos del form
-            for (const pair of formData) {
+            /* for (const pair of formData) {
                 console.log(`${pair[0]}: ${pair[1]}\n`);
-            }
+            } */
 
             if(opcion == 'crear'){
                 //api producto, post
@@ -532,7 +532,7 @@
                 })
                     .then(res => res.json())
                     .then(success => {
-                        console.log(success);
+                        // console.log(success);
 
                         Swal.fire({
                             title: 'Exito!',
@@ -556,7 +556,7 @@
                 })
                     .then(res => res.json())
                     .then(success => {
-                        console.log(success);
+                        // console.log(success);
 
                         Swal.fire({
                             title: 'Exito!',
@@ -575,13 +575,16 @@
         });
 
         $('#imagenProd').on('change',function(e){
-            let reader = new FileReader();
-            let fileName = imagen.files[0].name;
-            $(this).next('.custom-file-label').addClass("selected").html(fileName);
-            reader.onload = function(e) {
-                document.getElementById("imgPreview").src = e.target.result;
-            };
-            reader.readAsDataURL(this.files[0]);
+            //if image selected
+            if(imagen.files[0]){
+                let reader = new FileReader();
+                let fileName = imagen.files[0].name;
+                $(this).next('.custom-file-label').addClass("selected").html(fileName);
+                reader.onload = function(e) {
+                    document.getElementById("imgPreview").src = e.target.result;
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
         });
     </script>
 @stop
