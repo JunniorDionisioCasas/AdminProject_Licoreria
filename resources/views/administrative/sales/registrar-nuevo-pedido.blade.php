@@ -178,6 +178,7 @@
         console.log("{{$config_path}}");
         console.log("{{$storage_path}}");
         console.log("{{$url}}");
+        console.log("{{realpath($_SERVER["DOCUMENT_ROOT"])}}");
         /* Products table */
         let dataTableProductos = $('#tabla_productos').DataTable({
             "ajax":{
