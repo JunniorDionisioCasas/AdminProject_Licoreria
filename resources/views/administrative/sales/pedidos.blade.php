@@ -26,6 +26,7 @@
                             <th scope="col">Cliente Apellidos</th>
                             <th scope="col">Total</th>
                             <th scope="col">Fecha</th>
+                            <th scope="col">Tipo de venta</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Estado code</th>
                             <th scope="col">Comprobante URL</th>
@@ -115,6 +116,7 @@
                     }
                 },
                 {"data":"pdd_fecha_entrega"},
+                {"data":"tpe_nombre"},
                 {
                     "data":"pdd_estado",
                     render: function (data, type, row) {
@@ -191,7 +193,7 @@
                         titleAttr:'Formato Excel',
                         className: 'excelButton',
                         exportOptions: {
-                            columns: [1,3,5,6,7]
+                            columns: [1,3,5,6,7,8]
                         },
                         title: document.title,
                         messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
@@ -205,7 +207,7 @@
                         titleAttr:'Formato PDF',
                         className: 'pdfButton',
                         exportOptions: {
-                            columns: [1,3,5,6,7]
+                            columns: [1,3,5,6,7,8]
                         },
                         orientation: 'portrait',
                         // pageSize: 'LEGAL',
@@ -248,7 +250,7 @@
                         titleAttr:'Imprimir',
                         className: 'printButton',
                         exportOptions: {
-                            columns: [1,3,5,6,7]
+                            columns: [1,3,5,6,7,8]
                         },
                         messageTop: 'Fecha de consulta: ' + "{{Carbon\Carbon::now('-05:00')->locale('es_PE')->isoFormat('LLLL')}}",
                     }

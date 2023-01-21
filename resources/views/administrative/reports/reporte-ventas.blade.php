@@ -157,6 +157,7 @@
                     "orderable":false
                 }
             ],
+            order: [[6, 'desc']],
             autoWidth: false,
             language: {
                 url: 'vendor/datatables-plugins/internationalisation/es-ES.json'
