@@ -6,6 +6,10 @@
     <h1>Tabla Reporte de ventas</h1>
 @stop
 
+@section('css')
+    <link rel="stylesheet" href="/css/admin_custom.css">
+@stop
+
 @section('content')
 
     <div class="card">
@@ -21,10 +25,10 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
                                 <label for="dateFrom">Desde:</label>
-                                <input type="date" id="dateFrom" class="form-control" max="{{date('Y-m-d');}}" name="Desde">
+                                <input type="date" id="dateFrom" class="form-control" max="{{Carbon\Carbon::now('-05:00')->format('Y-m-d')}}" name="Desde">
                             
                                 <label for="dateUntil">Hasta:</label>
-                                <input type="date" id="dateUntil" class="form-control" max="{{date('Y-m-d');}}" name="Hasta">
+                                <input type="date" id="dateUntil" class="form-control" max="{{Carbon\Carbon::now('-05:00')->format('Y-m-d')}}" name="Hasta">
                             </li>
                             <li class="list-group-item" style="display: none;">
                                 <label for="selectProducto">Por producto:</label>
@@ -87,15 +91,11 @@
 
 @stop
 
-@section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
-@stop
-
 @section('js')
     <script src="js/urlDomain.js"></script>
     <script>
-        let dateFValue = "{{Carbon\Carbon::now('-05:00')->subYear()->format('Y-m-d')}}",
-         dateUValue = "{{date('Y-m-d')}}",
+        let dateFValue = "{{Carbon\Carbon::now('-05:00')->subYear()->format('Y-m-d H:m:s')}}",
+         dateUValue = "{{Carbon\Carbon::now('-05:00')->format('Y-m-d H:m:s')}}",
          idPrdSelected = 0,
          idTipoPddSelected = 0,
          idCltSelected = 0;
@@ -337,7 +337,9 @@
                 res.forEach(cliente => {
                     let option_elem = document.createElement('option');
                     option_elem.value = cliente.id;
-                    option_elem.textContent = cliente.name + ' ' + cliente.usr_apellidos;
+                    let cltCompleteName = cliente.name;
+                    if (cliente.usr_apellidos){ cltCompleteName = cltCompleteName + ' ' + cliente.usr_apellidos; }
+                    option_elem.textContent = cltCompleteName;
                     selectCliente.appendChild(option_elem);
                 });
             })
@@ -353,12 +355,20 @@
         };
 
         dateFrom.onchange = function(){
-            dateFValue = dateFrom.value;
+            if(dateFrom.value) {
+                dateFValue = dateFrom.value;
+            } else {
+                dateFValue = "{{Carbon\Carbon::now('-05:00')->subYear()->format('Y-m-d H:m:s')}}";
+            }
             dateUntil.min = dateFValue;
             updateTableUrl();
         };
         dateUntil.onchange = function(){
-            dateUValue = dateUntil.value;
+            if(dateUntil.value) {
+                dateUValue = dateUntil.value;
+            } else {
+                dateUValue = "{{Carbon\Carbon::now('-05:00')->format('Y-m-d H:m:s')}}";
+            }
             dateFrom.max = dateUValue;
             updateTableUrl();
         };
