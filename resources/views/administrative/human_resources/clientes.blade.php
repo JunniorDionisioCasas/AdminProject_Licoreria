@@ -125,7 +125,7 @@
                                 </div>
                             </div>
                             <div class="div-img-center">
-                                <img id="imgPreview" class="rounded-circle avatar-lg img-thumbnail img-preview" alt="cliente-image">
+                                <img id="imgPreview" class="rounded-circle avatar-lg img-thumbnail img-preview img-preview-user" alt="cliente-image">
                                 <small class="form-text text-muted">500x500 px preferentemente</small>
                             </div>
                             <small class="form-text text-muted">*: Campo obligatorio a rellenar.</small>

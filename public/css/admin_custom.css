@@ -45,6 +45,16 @@
 }
 
 /*preview de imagen seleccionada*/
+.img-preview-product {
+    height: 240px;
+    width: 240px;
+    object-fit: contain;
+}
+.img-preview-user {
+    height: 100px;
+    width: 100px;
+    object-fit: contain;
+}
 .img-preview-brand {
     width: auto;
     min-width: 173px;

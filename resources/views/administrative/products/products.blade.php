@@ -115,7 +115,7 @@
                                 </div>
                             </div>
                             <div class="div-img-center">
-                                <img id="imgPreview" class="rounded-circle avatar-lg img-thumbnail img-preview" alt="product-image">
+                                <img id="imgPreview" class="rounded-circle avatar-lg img-thumbnail img-preview img-preview-product" alt="product-image">
                                 <small class="form-text text-muted">800x960 px preferentemente</small>
                             </div>
                         </div>
